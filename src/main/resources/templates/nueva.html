@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Nueva Cita</title>
+</head>
+<body>
+<h1>Crear Nueva Cita</h1>
+<form action="/crear" method="post">
+  <div>
+    <label for="mascotaId">Mascota:</label>
+    <select name="mascotaId" id="mascotaId" required>
+      <option th:each="mascota : ${mascotas}"
+              th:value="${mascota.id}"
+              th:text="${mascota.nombre}"></option>
+    </select>
+  </div>
+  <div>
+    <label for="servicioId">Servicio:</label>
+    <select name="servicioId" id="servicioId" required>
+      <option th:each="servicio : ${servicios}"
+              th:value="${servicio.id}"
+              th:text="${servicio.nombre}"></option>
+    </select>
+  </div>
+  <div>
+    <label for="fechaCita">Fecha de la cita:</label>
+    <input type="date" name="fechaCita" id="fechaCita" required>
+  </div>
+  <div>
+    <label for="horarioId">Horario:</label>
+    <select name="horarioId" id="horarioId" required>
+      <option th:each="horario : ${horarios}"
+              th:value="${horario.id}"
+              th:text="${horario.hora}"></option>
+    </select>
+  </div>
+  <div>
+    <label for="razon">Razón de la cita:</label>
+    <textarea name="razon" id="razon"></textarea>
+  </div>
+  <div>
+    <button type="submit">Crear Cita</button>
+  </div>
+</form>
+
+<div th:if="${error}">
+  <p style="color:red;">Error: <span th:text="${error}"></span></p>
+</div>
+</body>
+</html>

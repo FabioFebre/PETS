@@ -1,0 +1,135 @@
+/* General */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #007bff;
+  color: #fff;
+  padding: 20px;
+}
+
+h1, h3 {
+  margin: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Sección de Productos */
+.productos {
+  padding: 40px 0;
+  background-color: #fff;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 40px;
+}
+
+.productos-listado {
+  display: flex;
+  flex-wrap: wrap; /* Permite que los productos se ajusten automáticamente en filas */
+  gap: 20px;
+  justify-content: space-between; /* Se asegura que los elementos se distribuyan de manera uniforme */
+}
+
+.producto-item {
+  flex: 1 1 calc(33% - 20px); /* Ajuste de 3 columnas en pantallas grandes, con espacio entre ellas */
+  max-width: calc(33% - 20px); /* Evita que los productos se salgan de su contenedor */
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+
+.producto-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+}
+
+.producto-card:hover {
+  transform: translateY(-10px);
+}
+
+.producto-imagen {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.producto-imagen img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.producto-detalles {
+  padding: 15px;
+}
+
+.producto-nombre {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.producto-descripcion {
+  color: #555;
+}
+
+.producto-marca {
+  color: #777;
+}
+
+.producto-precio {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #007bff;
+  margin-top: 10px;
+}
+
+.producto-boton {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #fff;
+  text-align: center;
+}
+
+.producto-boton button {
+  background-color: #28a745;
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.producto-boton button:hover {
+  background-color: #218838;
+}
+
+/* Carrito de Compras */
+.carrito {
+  padding: 40px 0;
+  background-color: #f9f9f9;
+}
+
+.producto-carrito {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+hr {
+  border-top: 1px solid #ddd;
+  margin-top: 20px;
+}

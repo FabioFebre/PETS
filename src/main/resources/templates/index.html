@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PetsFriends</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" th:href="@{/css/estilos.css}" />
+
+  <link rel="stylesheet" href="path/to/your/bootstrap.css">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+  <style>
+    .card img {
+         max-height: 200px; /* Ajusta la altura máxima según sea necesario */
+        object-fit: cover; /* Esto asegurará que la imagen mantenga su relación de aspecto */
+    }
+
+     body {
+         font-family: 'Arial', sans-serif;
+         background-color: #f8f9fa;
+         color: #333;
+     }
+
+     .navbar {
+         background-color: #343a40;
+     }
+
+     .navbar-brand {
+         color: #fff;
+     }
+
+     .hero {
+         display: flex;
+         align-items: center;
+         justify-content: flex-start;
+         height: 600px;
+         padding-left: 20px;
+         padding-right: 750px;
+         position: relative;
+         overflow: hidden;
+     }
+
+     .hero-content {
+         z-index: 1;
+         max-width: 400px;
+         background-color: rgba(255, 255, 255, 0.8);
+         padding: 20px;
+         border-radius: 10px;
+     }
+
+     #carouselExample img {
+         object-fit: cover;
+         height: 100%;
+         width: 100%;
+         border-radius: 10px;
+     }
+
+     .section-title {
+         font-size: 2rem;
+         font-weight: bold;
+         color: #333;
+         margin-top: 50px;
+         text-align: center;
+     }
+
+     .card {
+         margin: 20px 0;
+         background-color: #fff;
+         border-radius: 10px;
+         border: none;
+         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+     }
+
+     .card-body {
+         padding: 2rem;
+     }
+
+     footer {
+         background-color: #343a40;
+         color: white;
+         text-align: center;
+         padding: 20px 0;
+         margin-top: 50px;
+     }
+
+     #mapa iframe {
+         border-radius: 10px;
+     }
+
+     @media (max-width: 768px) {
+         .hero {
+             padding-right: 20px;
+         }
+     }
+
+    .navbar {
+        background-color: #668c8c; /* Color proporcionado */
+    }
+
+
+     .navbar-brand, .nav-link {
+         color: #fff;
+         font-weight: 500;
+         transition: color 0.3s;
+     }
+
+     .navbar-brand:hover, .nav-link:hover {
+         color: #f8c24f; /* Amarillo para hover */
+     }
+
+     .btn-outline-light:hover {
+         background-color: #f8c24f;
+         border-color: #f8c24f;
+         color: #fff;
+     }
+
+     .hero-content h1 {
+         color: #007b5e; /* Verde inspirado en Digivet */
+         font-size: 3rem;
+         font-weight: 700;
+     }
+
+     .section-title {
+         color: #007b5e;
+         border-bottom: 3px solid #f8c24f; /* Línea decorativa */
+         display: inline-block;
+         padding-bottom: 10px;
+     }
+
+     .card {
+         border: 1px solid #ddd;
+         transition: transform 0.3s, box-shadow 0.3s;
+     }
+
+     .card:hover {
+         transform: translateY(-5px);
+         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+     }
+
+     .btn-primary {
+         background-color: #007b5e;
+         border-color: #007b5e;
+     }
+
+     .btn-primary:hover {
+         background-color: #005843;
+         border-color: #005843;
+     }
+
+     footer {
+         background-color: #0b3d4d;
+         color: #fff;
+         padding: 30px 0;
+     }
+
+     footer a {
+         color: #f8c24f;
+         text-decoration: none;
+     }
+
+     footer a:hover {
+         text-decoration: underline;
+     }
+
+     .whatsapp-float {
+         position: fixed;
+         bottom: 20px; /* Ajusta la distancia desde el fondo */
+         right: 20px;  /* Ajusta la distancia desde el lado derecho */
+         background-color: #25d366; /* Color de fondo de WhatsApp */
+         color: white;  /* Color del ícono */
+         border-radius: 50%;  /* Hace que el botón sea redondo */
+         padding: 15px;  /* Tamaño del botón */
+         font-size: 24px;  /* Tamaño del ícono */
+         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* Sombra para darle profundidad */
+         transition: background-color 0.3s ease;  /* Animación para cambiar el color */
+     }
+
+     .whatsapp-float:hover {
+         background-color: #128C7E; /* Cambio de color cuando se pasa el ratón */
+     }
+
+
+    #veterinarios {
+      padding: 50px 0;
+      background-color: #f9f9f9;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 40px;
+      color: #333;
+    }
+
+    /* Tarjetas de veterinarios */
+    .card {
+      border: none;
+      border-radius: 10px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .img-fluid {
+      max-width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #555;
+    }
+
+    .card-text {
+      font-size: 0.9rem;
+      color: #777;
+    }
+
+    /* Clase para espaciado */
+    .mb-4 {
+      margin-bottom: 1.5rem !important;
+    }
+
+    .carousel-item {
+        padding: 20px;
+    }
+    .card {
+        border: none;
+        background-color: #e5e7e9;
+    }
+    .img-fluid {
+        border: 3px solid #6c757d;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+
+
+  </style>
+
+  <nav class="navbar navbar-expand-lg navbar-dark absolute">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img src="/images/LOGO-PETS0.png" alt="LOGO PETSFRIENDS" style="height: 100px;">
+        PETSFRIENDS
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li>
+          <li class="nav-item"><a class="nav-link" href="#productos">Productos</a></li>
+          <li class="nav-item"><a class="nav-link btn btn-outline-light" href="/perfil"><i class="fas fa-user-circle"></i> Perfil</a></li>
+          <li class="nav-item"><a class="nav-link btn btn-outline-light" href="/carrito"><i class="fas fa-shopping-cart"></i> Carrito</a></li>
+          <li class="nav-item"><a class="nav-link btn btn-outline-light" href="/citas"><i class="fa-solid fa-dog"></i>Citas</a></li>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+  <section class="hero">
+    <div id="carouselExample" class="carousel slide carousel-fade position-absolute w-100 h-100" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="images/Logo.avif" class="d-block w-100 h-100" alt="Imagen 1" style="object-fit: cover;">
+        </div>
+      </div>
+    </div>
+
+    <div class="container d-flex justify-content-start align-items-center hero-content position-relative z-index-1">
+      <div class="text-box text-left p-4" style="background-color: rgba(255, 255, 255, 0.5); border-radius: 10px; max-width: 400px;">
+        <h1 style="font-weight: 800;">HOLA AMIGOS</h1>
+        <p>En PETSFRIENDS, estamos comprometidos con brindar el mejor cuidado para tus mascotas. Confía en nosotros para mantener a tus amigos peludos sanos y felices.</p>
+      </div>
+    </div>
+  </section>
+
+
+<main>
+
+
+  <section id="servicios" class="container mt-5">
+    <h2 class="section-title">¿Qué OFRECEMOS?</h2>
+    <div class="row">
+      <div class="col-md-4" th:each="servicio : ${servicios}">
+        <div class="card mb-4 shadow-sm">
+          <div class="card-body">
+            <p class="text-muted" th:text="${servicio.categoria.nombre}">Categoría del servicio</p>
+            <p class="card-text" th:text="${servicio.descripcion}">Descripción del servicio</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="productos" class="mb-5">
+    <h2 class="section-title">Nuestros Productos</h2>
+    <div class="row">
+      <div class="col-md-4" th:each="producto : ${productos}">
+        <div class="card mb-4 shadow-sm text-center">
+          <div class="card-body">
+            <img th:src="${producto.imagen}"
+                 alt="Imagen de ${producto.nombre}"
+                 class="img-fluid mx-auto d-block" />
+            <h5 class="card-title" th:text="${producto.nombre}">Nombre del Producto</h5>
+            <p class="card-text" th:text="${producto.descripcion}">Descripción del producto</p>
+            <p class="text-muted" th:text="'Marca: ' + ${producto.marca}">Marca del producto</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="reservas-contacto" class="container mt-5">
+    <h2 class="section-title text-left mb-4">Tu mascota, siempre a tu alcance</h2>
+    <div class="row">
+      <div class="col-md-6 d-flex flex-column justify-content-center align-items-start">
+        <p>En PETSFRIENDS, te brindamos una solución completa para el cuidado de tu mascota, todo desde la comodidad de tu hogar. A través de nuestra plataforma, podrás registrar a tu mascota, gestionar citas agendadas y comprar productos de calidad, todo en un solo lugar. Gracias a nuestra interfaz fácil de usar, tendrás un control total de la salud y bienestar de tu compañero. ¡Bienvenidos a una nueva forma de cuidar a tu mascota!</p>
+      </div>
+
+      <div class="col-md-6 d-flex justify-content-center align-items-center">
+        <div id="mapa" style="width: 100%;">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12805.497812994526!2d-79.04406003139155!3d-8.13250368465853!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91ad3dae38ca1e5b%3A0xf8a16f2b8bf3c0d!2sPetFriend!5e0!3m2!1ses!2ses!4v1695381327387!5m2!1ses!2ses" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="veterinarios" class="mb-5">
+    <h2 class="section-title text-center mb-4">Nuestros Veterinarios</h2>
+    <div id="veterinariosCarousel" class="carousel slide" data-bs-ride="carousel">
+      <!-- Indicadores -->
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#veterinariosCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#veterinariosCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#veterinariosCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      </div>
+
+      <!-- Carrusel -->
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <div class="row justify-content-center">
+            <div class="col-md-4" th:each="veterinario, iter : ${veterinarios}" th:if="${iter.index < 3}">
+              <div class="card mb-4 shadow-sm text-center">
+                <div class="card-body">
+                  <img th:src="@{/img/VETR.jpeg}" alt="Imagen del Veterinario" class="img-fluid mx-auto d-block rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                  <h5 class="card-title mt-3" th:text="${veterinario.nombres} + ' ' + ${veterinario.apellidos}">Nombre del Veterinario</h5>
+                  <p class="card-text" th:text="${veterinario.telefono}">Teléfono</p>
+                  <p class="card-text" th:text="${veterinario.correo}">Correo</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="carousel-item">
+          <div class="row justify-content-center">
+            <div class="col-md-4" th:each="veterinario, iter : ${veterinarios}" th:if="${iter.index >= 3 && iter.index < 6}">
+              <div class="card mb-4 shadow-sm text-center">
+                <div class="card-body">
+                  <img th:src="@{/img/VETR.jpeg}" alt="Imagen del Veterinario" class="img-fluid mx-auto d-block rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                  <h5 class="card-title mt-3" th:text="${veterinario.nombres} + ' ' + ${veterinario.apellidos}">Nombre del Veterinario</h5>
+                  <p class="card-text" th:text="${veterinario.telefono}">Teléfono</p>
+                  <p class="card-text" th:text="${veterinario.correo}">Correo</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controles -->
+      <button class="carousel-control-prev" type="button" data-bs-target="#veterinariosCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Anterior</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#veterinariosCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Siguiente</span>
+      </button>
+    </div>
+  </section>
+
+
+
+
+
+
+</main>
+<footer>
+  <p>&copy; 2024 Mi Veterinaria - Todos los derechos reservados</p>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+  <a href="https://wa.me/1234567890" class="whatsapp-float" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  </body>
+</head>
+</html>
+

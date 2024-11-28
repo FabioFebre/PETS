@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Citas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e8f8f5;
+            color: #333;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #5d0000;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .contact-form-wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .contact-section {
+            flex: 1;
+            padding: 20px;
+            background: #ffefea;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-section h2 {
+            color: #ff6a4d;
+            margin-bottom: 15px;
+        }
+
+        .contact-section p {
+            margin: 10px 0;
+        }
+
+        .contact-section strong {
+            color: #333;
+        }
+
+        .form-section {
+            flex: 2;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-section label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-section input,
+        .form-section select,
+        .form-section textarea,
+        .form-section button {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .form-section textarea {
+            resize: none;
+            height: 80px;
+        }
+
+        .form-section button {
+            background-color: #ff6a4d;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-section button:hover {
+            background-color: #ff5733;
+        }
+
+        .cards-list {
+            margin-top: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            width: 300px;
+            padding: 15px;
+            background: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h3 {
+            color: #ff6a4d;
+        }
+       .contact-section {
+            padding: 20px;
+            background-color: #d5dbdb;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .contact-section h2 {
+            font-size: 1.8rem;
+            color: #5d0000;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .contact-section p {
+            color: #555;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .contact-item {
+            flex: 1;
+            padding: 15px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .contact-item h3 {
+            font-size: 1.4rem;
+            color: #5d0000;
+            margin-bottom: 10px;
+        }
+
+        .contact-item p {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .contact-item a {
+            color: #5d0000;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Gestión de Citas</h1>
+    <div th:if="${errorMessage}" class="alert alert-danger">
+        <p th:text="${errorMessage}"></p>
+    </div>
+    <div class="contact-form-wrapper">
+        <div class="contact-section">
+            <h2>¡Contáctanos! Estamos aquí para ayudarte</h2>
+            <p>En <strong>PETSFRIENDS</strong>,nos dedicamos a ofrecer cuidado de calidad para tus mascotas. Sabemos lo importante que es tu compañero peludo, y nuestro equipo de profesionales está listo para brindarte el mejor servicio, desde consultas veterinarias hasta tratamientos especializados, todo desde la comodidad de tu hogar.</p>
+
+            <p>Si tienes alguna duda o deseas obtener más información sobre nuestros servicios de salud para mascotas, como vacunas, consultas, o tratamientos, no dudes en ponerte en contacto con nosotros. ¡Estamos aquí para ayudarte a cuidar a tu mejor amigo!</p>
+
+            <div class="contact-info">
+                <div class="contact-item">
+                    <h3>Teléfono</h3>
+                    <p>974756684</p>
+                </div>
+                <div class="contact-item">
+                    <h3>Correo Electrónico</h3>
+                    <p><a href="fabio.febre@tecsup.edu.pe">PetsFriends.gmail.com</a></p>
+                </div>
+                <div class="contact-item">
+                    <a href="https://maps.app.goo.gl/nJpvWjxyhfKnDm5U7" target="_blank">
+                        <img src="https://img.icons8.com/ios-filled/50/000000/marker.png" alt="Ubicación" style="width: 30px; height: 30px;">
+                        <span>Ver en Google Maps</span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="form-section">
+            <h2>Registrar Nueva Cita</h2>
+            <form action="/citas" method="post" th:object="${nuevaCita}">
+                <div>
+                    <label for="fechaCita">Fecha:</label>
+                    <input type="date" id="fechaCita" th:field="*{fechaCita}" required>
+                </div>
+                <div>
+                    <label for="horario">Horario:</label>
+                    <select id="horario" th:field="*{horario}" required>
+                        <option th:each="horario : ${horarios}" th:value="${horario.horarioId}" th:text="${horario.hora}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label for="mascota">Mascota:</label>
+                    <select id="mascota" th:field="*{mascota}" required>
+                        <option th:each="mascota : ${mascotas}" th:value="${mascota.mascotaId}" th:text="${mascota.nombre}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label for="servicio">Servicio:</label>
+                    <select id="servicio" th:field="*{servicio}" required>
+                        <option th:each="servicio : ${servicios}" th:value="${servicio.servicioId}" th:text="${servicio.nombre}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label for="razon">Razón:</label>
+                    <textarea id="razon" th:field="*{razon}"></textarea>
+                </div>
+                <div>
+                    <label for="observaciones">Observaciones:</label>
+                    <textarea id="observaciones" th:field="*{observaciones}"></textarea>
+                </div>
+                <button type="submit">Registrar Cita</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Listado de citas -->
+    <h2>Mis Citas</h2>
+    <div class="cards-list">
+        <div th:each="cita : ${citas}" class="card">
+            <h3>Cita ID: <span th:text="${cita.citaId}"></span></h3>
+            <p><strong>Fecha:</strong> <span th:text="${cita.fechaCita}"></span></p>
+            <p><strong>Horario:</strong> <span th:text="${cita.horario.hora}"></span></p>
+            <p><strong>Mascota:</strong> <span th:text="${cita.mascota.nombre}"></span></p>
+            <p><strong>Servicio:</strong> <span th:text="${cita.servicio.nombre}"></span></p>
+            <p><strong>Estado:</strong>
+                <span th:text="${cita.estado ? 'Completada' : 'Pendiente'}"
+                      style="color: ${cita.estado ? 'green' : 'red'};"></span>
+            </p>
+
+            <form th:action="@{/citas/eliminar/{citaId}(citaId=${cita.citaId})}" method="post">
+                <input type="hidden" name="_method" value="delete"/>
+                <button type="submit">Eliminar Cita</button>
+            </form>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <button onclick="window.location.href='/'" style="padding: 10px 20px; background-color: #ff6a4d; color: white; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer;">
+            Volver a la Página Principal
+        </button>
+    </div>
+</div>
+</body>
+</html>

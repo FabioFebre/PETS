@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Actualizar Usuario</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 600px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"], input[type="email"], input[type="date"], input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        input[type="text"]:focus, input[type="email"]:focus, input[type="date"]:focus, input[type="file"]:focus {
+            border-color: #4CAF50;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        p {
+            color: red;
+            text-align: center;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<form action="/usuario/actualizar" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+
+    <label for="nombres">Nombres:</label>
+    <input type="text" name="nombres" value="${usuario.nombres}" required />
+
+    <label for="apellidos">Apellidos:</label>
+    <input type="text" name="apellidos" value="${usuario.apellidos}" required />
+
+    <label for="correo">Correo:</label>
+    <input type="email" name="correo" value="${usuario.correo}" required />
+
+    <label for="username">Username:</label>
+    <input type="text" name="username" value="${usuario.username}" required />
+
+    <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+    <input type="date" name="fechaNacimiento" value="${usuario.fechaNacimiento}" required />
+
+    <label for="telefono">Teléfono:</label>
+    <input type="text" name="telefono" value="${usuario.telefono}" required />
+
+    <label for="direccion">Dirección:</label>
+    <input type="text" name="direccion" value="${usuario.direccion}" required />
+
+    <label for="foto">Foto:</label>
+    <input type="file" name="foto" accept="image/*" />
+
+    <button type="submit">Actualizar</button>
+</form>
+
+</body>
+</html>

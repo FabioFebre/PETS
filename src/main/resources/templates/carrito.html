@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+
+        .carrito .container {
+            max-width: 1200px; /* Establece un ancho máximo para que no ocupe toda la pantalla */
+            margin: 0 auto; /* Centra el contenedor en la pantalla */
+        }
+
+        .carrito .bg-[#b2babb] {
+            padding: 1.5rem; /* Asegura que haya espacio alrededor */
+        }
+
+        .carrito .grid {
+            display: grid; /* Utiliza Grid para crear las columnas */
+            grid-template-columns: repeat(3, 1fr); /* Crea 3 columnas de igual tamaño */
+            gap: 1.5rem; /* Espacio entre las columnas y filas */
+        }
+
+        .carrito .p-6 {
+            background-color: #99a3a4; /* Fondo gris para los productos */
+            border-radius: 8px; /* Bordes redondeados */
+            padding: 1rem; /* Espacio interior */
+        }
+
+        @media (max-width: 768px) {
+            .carrito .grid {
+                grid-template-columns: repeat(2, 1fr); /* En pantallas más pequeñas, usa 2 columnas */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .carrito .grid {
+                grid-template-columns: 1fr; /* En pantallas muy pequeñas, usa 1 columna */
+            }
+        }
+
+        .grid {
+            width: 100%;
+        }
+        .bg-greenPastel {
+            background-color: #273746;
+        }
+        .text-teal {
+            color: #00695c;
+        }
+        .text-orangeSoft {
+            color: #ff7043;
+        }
+    </style>
+</head>
+<body class="bg-greenPastel font-sans">
+
+<div class="container mx-auto my-8">
+    <h3 class="text-3xl font-bold text-center text-teal mb-8">Detalles del Carrito</h3>
+    <div class="flex justify-center">
+        <div class="bg-[#b2babb] shadow-lg rounded-lg p-6 w-full max-w-md border-l-4 border-orangeSoft">
+            <div class="flex justify-between">
+                <p><strong>ID del Carrito:</strong> <span th:text="${carritoId}"></span></p>
+                <p><strong>ID del Usuario:</strong> <span th:text="${usuarioId}"></span></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="productos">
+    <div class="container mx-auto">
+        <h2 class="text-3xl font-bold text-center text-orangeSoft mb-8">Nuestros Productos</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="relative bg-[#b2babb] shadow-lg rounded-lg overflow-hidden" th:each="producto : ${productos}">
+                <!-- Imagen de fondo -->
+                <div class="h-48 bg-cover bg-center" th:style="'background-image: url(' + ${producto.imagen} + ');'"></div>
+                <div class="p-4">
+                    <h5 class="text-lg font-bold text-teal mb-2" th:text="${producto.nombre}"></h5>
+                    <p class="text-gray-700 mb-2" th:text="${producto.descripcion}"></p>
+                    <p class="text-orangeSoft font-bold mb-4" th:text="'$' + ${producto.precio}"></p>
+                    <form th:action="@{/carrito/agregar}" method="POST" class="space-y-2">
+                        <input type="hidden" th:name="producto_id" th:value="${producto.producto_id}">
+                        <input type="number" th:name="cantidad" value="1" class="border rounded px-3 py-2 w-full" required>
+                        <button type="submit" class="bg-[#48c9b0] text-[#e8f8f5] px-4 py-2 rounded transition-colors duration-300 hover:bg-[#cd6155]">
+                            Agregar al carrito
+                        </button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!-- Cart Section -->
+<section class="carrito my-12">
+    <div class="container mx-auto">
+        <h3 class="text-3xl font-bold text-center text-orangeSoft mb-8">Productos en el Carrito</h3>
+        <div class="bg-[#b2babb] shadow-lg rounded-lg p-6 border-l-4 border-teal">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" style="background-color: #99a3a4;">
+                <div class="p-6 border-b mb-6" th:each="item : ${productosCarrito}">
+                    <h5 class="text-xl font-bold text-orangeSoft mb-2" th:text="${item.producto.nombre}"></h5>
+                    <p><strong>Precio:</strong> <span th:text="${item.producto.precio}"></span></p>
+                    <p><strong>Cantidad:</strong> <span th:text="${item.cantidad}"></span></p>
+                    <p><strong>Subtotal:</strong> <span th:text="${item.precio}"></span></p>
+                    <form th:action="@{/carrito/eliminar}" method="POST" class="mt-4">
+                        <input type="hidden" th:name="producto_id" th:value="${item.producto.producto_id}">
+                        <button type="submit" class="bg-[#48c9b0] text-[#e8f8f5] px-6 py-2 rounded transition-colors duration-300 hover:bg-[#cd6155] inline-block">
+                            Eliminar
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="text-center mt-8">
+                <a href="/pago" class="bg-[#48c9b0] text-[#e8f8f5] px-6 py-2 rounded transition-colors duration-300 hover:bg-[#cd6155] inline-block">
+                    Ir a la Transacción
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div class="text-center my-4">
+    <a href="/" class="text-teal hover:underline">Regresar</a>
+</div>
+
+<footer class="bg-orangeSoft text-white py-4 text-center">
+    <p>&copy; 2024 Carrito de Compras. Todos los derechos reservados.</p>
+</footer>
+
+</body>
+</html>
