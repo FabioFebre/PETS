@@ -1,31 +1,46 @@
 package com.example.demo.services;
 
 import com.example.demo.models.MetodoPago;
+import com.example.demo.repository.MetodoPagoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MetodoPagoService {
 
-    private final RestTemplate restTemplate;
-
-    private final String API_URL = "https://petsfriends-tw49.onrender.com/api/metodos-pago/";
+    private final MetodoPagoRepository metodoPagoRepository;
 
     @Autowired
-    public MetodoPagoService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public MetodoPagoService(MetodoPagoRepository metodoPagoRepository) {
+        this.metodoPagoRepository = metodoPagoRepository;
     }
 
+    // Obtener todos los métodos de pago
     public List<MetodoPago> obtenerTodosLosMetodos() {
-        MetodoPago[] metodos = restTemplate.getForObject(API_URL, MetodoPago[].class);
-        return List.of(metodos);
+        return metodoPagoRepository.findAll();
     }
 
+    // Obtener un método de pago por ID
     public MetodoPago obtenerMetodoPorId(Long id) {
-        String url = API_URL + id;
-        return restTemplate.getForObject(url, MetodoPago.class);
+        Optional<MetodoPago> metodo = metodoPagoRepository.findById(id);
+        return metodo.orElse(null); // Devuelve null si no se encuentra el método de pago
     }
 
+    // Agregar un nuevo método de pago
+    public MetodoPago agregarMetodoPago(MetodoPago metodoPago) {
+        return metodoPagoRepository.save(metodoPago);
+    }
+
+    // Actualizar un método de pago existente
+    public MetodoPago actualizarMetodoPago(MetodoPago metodoPago) {
+        return metodoPagoRepository.save(metodoPago);
+    }
+
+    // Eliminar un método de pago por ID
+    public void eliminarMetodoPago(Long id) {
+        metodoPagoRepository.deleteById(id);
+    }
 }

@@ -32,11 +32,9 @@ public class ProductoCarritoService {
         this.restTemplate = restTemplate;
     }
 
-    public List<ProductoCarrito> obtenerProductosCarrito(Long carritoId, int usuarioId) {
-        String url = "https://petsfriends-tw49.onrender.com/api/productos-carrito/?carritoId=" + carritoId + "&usuarioId=" + usuarioId + "&format=json";
-        ProductoCarrito[] productosArray = restTemplate.getForObject(url, ProductoCarrito[].class);
 
-        return Arrays.asList(productosArray);
+    public List<ProductoCarrito> obtenerProductosCarrito(Long carritoId , int usuarioId ) {
+        return productoCarritoRepository.findByCarritoId(carritoId);
     }
 
 

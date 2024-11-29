@@ -26,40 +26,7 @@ public class ProductoService {
     }
 
     public List<Producto> obtenerTodosLosProductos() {
-        String url = "https://petsfriends-tw49.onrender.com/api/productos/";
-
-        ResponseEntity<List<Producto>> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<List<Producto>>() {}
-        );
-
-        return response.getBody();
-    }
-
-
-
-    public Producto obtenerProductoPorId(Long productoId) {
-        if (productoId == null) {
-            return null;
-        }
-
-        String url = "http://127.0.0.1:8000/api/productos/" + productoId + "/?format=json";
-        try {
-            ResponseEntity<Producto> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.GET,
-                    null,
-                    Producto.class
-            );
-            Producto producto = response.getBody();
-            System.out.println("Producto recibido: " + producto);
-            return producto;
-        } catch (Exception e) {
-            System.out.println("Error al obtener producto por ID: " + e.getMessage());
-            return null;
-        }
+        return productoRepository.findAll();
     }
 
 }
