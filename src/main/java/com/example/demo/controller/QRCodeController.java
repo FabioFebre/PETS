@@ -16,19 +16,19 @@ public class QRCodeController {
     private MascotaService mascotaService; // Inyectamos el servicio
 
     @GetMapping("/generar_qr/{mascotaId}")
-    public void generarQRCodeConLogo(@PathVariable("mascotaId") Integer mascotaId, HttpServletResponse response) throws Exception {
-        // Obtener la mascota por su ID
+    public void generarQRCode(@PathVariable("mascotaId") Integer mascotaId, HttpServletResponse response) throws Exception {
+        // Obtener la mascota por ID
         Mascota mascota = mascotaService.obtenerMascotaPorId(mascotaId).orElse(null);
 
         if (mascota != null) {
-            // Generar el código QR con logo
-            byte[] qrCodeImage = mascota.generarCodigoQRConLogo();
+            // Generar el código QR sin el logo
+            byte[] qrCodeImage = mascota.generarCodigoQR();
 
             // Configurar la respuesta HTTP para devolver la imagen del QR
             response.setContentType("image/png");
             response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=mascota_qr.png");
 
-            // Escribir la imagen QR en la respuesta
+            // Escribir la imagen en la respuesta
             response.getOutputStream().write(qrCodeImage);
             response.getOutputStream().flush();
         } else {
@@ -37,5 +37,8 @@ public class QRCodeController {
             response.getWriter().write("Mascota no encontrada.");
         }
     }
+
+
+
 
 }

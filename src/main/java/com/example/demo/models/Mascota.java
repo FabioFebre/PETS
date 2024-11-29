@@ -190,7 +190,7 @@ public class Mascota {
         }
     }
 
-    public byte[] generarCodigoQRConLogo() throws WriterException, IOException {
+    public byte[] generarCodigoQR() throws WriterException, IOException {
         // Obtenemos los datos de la mascota
         String nombre = this.nombre;
         String edad = this.edad != null ? String.valueOf(this.edad) : "Desconocida";
@@ -204,30 +204,13 @@ public class Mascota {
         Map<EncodeHintType, Object> hints = new HashMap<>();
         hints.put(EncodeHintType.MARGIN, 1);  // Espacio en blanco alrededor del QR
 
+        // Generar el código QR como imagen
         BufferedImage qrImage = toBufferedImage(qrCodeWriter.encode(data, BarcodeFormat.QR_CODE, 180, 180, hints));
 
-        BufferedImage logo = ImageIO.read(new File("C:\\demo\\demo\\src\\main\\resources\\static\\images\\LOGO-PETS0.png"));
-
-        int logoWidth = qrImage.getWidth() / 2;
-        int logoHeight = qrImage.getHeight() / 2;
-        Image scaledLogo = logo.getScaledInstance(logoWidth, logoHeight, Image.SCALE_SMOOTH);
-
-        BufferedImage combinedImage = new BufferedImage(qrImage.getWidth(), qrImage.getHeight(), BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = combinedImage.createGraphics();
-
-        g.drawImage(qrImage, 0, 0, null);
-
-        // Dibuja el logo en el centro del código QR
-        int x = (qrImage.getWidth() - logoWidth) / 2;  // Posición X para centrar
-        int y = (qrImage.getHeight() - logoHeight) / 2; // Posición Y para centrar
-        g.drawImage(scaledLogo, x, y, null);
-
-        // Asegúrate de que el logo no cubra los módulos de la esquina y los patrones de alineación
-        g.dispose();
-
-        // Convertir la imagen a un arreglo de bytes
+        // Convertir la imagen del QR a un arreglo de bytes
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(combinedImage, "PNG", baos);
+        ImageIO.write(qrImage, "PNG", baos);
+
         return baos.toByteArray();
     }
 
