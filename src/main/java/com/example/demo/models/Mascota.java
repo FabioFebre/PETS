@@ -1,6 +1,7 @@
 package com.example.demo.models;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
@@ -14,6 +15,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Entity
@@ -185,34 +188,35 @@ public class Mascota {
         }
     }
 
+    public byte[] generarCodigoQR() throws WriterException, IOException {
+        String nombre = this.nombre;
+        String edad = this.edad != null ? String.valueOf(this.edad) : "Desconocida";
+        String raza = this.raza != null ? this.raza : "Desconocida";
 
-    public BufferedImage generarCodigoQR() throws WriterException {
+        String data = "Nombre: " + nombre + ", Edad: " + edad + ", Raza: " + raza;
+
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        Map<EncodeHintType, Object> hints = new HashMap<>();
+        hints.put(EncodeHintType.MARGIN, 1);
 
-        // Concatenar toda la información de la mascota en una cadena
-        String data =
-                "\nNombre: " + nombre +
-                "\nEspecie: " + especie +
-                "\nRaza: " + raza +
-                "\nFecha de Nacimiento: " + (fechaNacimiento != null ? fechaNacimiento : "No especificada") +
-                "\nPeso: " + (peso != null ? peso + " kg" : "No especificado") +
-                "\nAltura: " + (altura != null ? altura + " cm" : "No especificada") +
-                "\nEdad: " + edad + " años" +
-                "\nColor: " + color +
-                "\nObservaciones: " + (observaciones != null ? observaciones : "Ninguna") +
-                "\nFecha de Inscripción: " + fechaInscripcion +
-                "\nCódigo Identificación: " + codigoIdentificacion;
+        BufferedImage bufferedImage = toBufferedImage(qrCodeWriter.encode(data, BarcodeFormat.QR_CODE, 180, 180, hints));
 
-        // Generar el QR con la información concatenada
-        BitMatrix bitMatrix = qrCodeWriter.encode(data, BarcodeFormat.QR_CODE, 250, 250);
-        return MatrixToImageWriter.toBufferedImage(bitMatrix);
-    }
-
-    public byte[] obtenerQRCodeEnBytes() throws WriterException, IOException {
-        BufferedImage qrImage = generarCodigoQR();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(qrImage, "PNG", baos);
+        ImageIO.write(bufferedImage, "PNG", baos);
         return baos.toByteArray();
     }
+
+    private static BufferedImage toBufferedImage(com.google.zxing.common.BitMatrix matrix) {
+        int width = matrix.getWidth();
+        int height = matrix.getHeight();
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                image.setRGB(x, y, matrix.get(x, y) ? 0x000000 : 0xFFFFFF);
+            }
+        }
+        return image;
+    }
+
 
 }

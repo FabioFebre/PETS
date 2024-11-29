@@ -3,19 +3,21 @@ package com.example.demo.services;
 import com.example.demo.models.Mascota;
 import com.example.demo.repository.MascotaRepository;
 import com.example.demo.repository.UsuarioRepository;
+import com.google.zxing.WriterException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MascotaService {
 
-    public static final String API_URL = "https://petsfriends-tw49.onrender.com/api/mascotas/";
 
 
     @Autowired
@@ -28,36 +30,23 @@ public class MascotaService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public List<Mascota> obtenerMascotas() {
-        Mascota[] mascotasArray = restTemplate.getForObject(API_URL, Mascota[].class);
 
-        if (mascotasArray != null) {
-            return Arrays.asList(mascotasArray);
-        }
-        return null;
-    }
     public List<Mascota> obtenerMascotasPorUsuario(int usuarioId) {
-        return mascotaRepository.findByUsuarioId(usuarioId);  // Cambié Long a int
+        return mascotaRepository.findByUsuarioId(usuarioId);
+    }
+    public List<Mascota> obtenerTodasLasMascotas() {
+        return mascotaRepository.findAll();
+    }
+
+    public Optional<Mascota> obtenerMascotaPorId(Integer id) {
+        return mascotaRepository.findById(id);
+    }
+
+    public Optional<Mascota> findById(Integer mascotaId) {
+        return mascotaRepository.findById(mascotaId);
     }
 
 
-    public Mascota obtenerMascotaPorId(Long mascotaId) {
-        String url = UriComponentsBuilder.fromHttpUrl(API_URL)
-                .pathSegment(mascotaId.toString())
-                .toUriString();
-        return restTemplate.getForObject(url, Mascota.class);
-    }
-
-    public Mascota crearMascota(Mascota mascota) {
-        return restTemplate.postForObject(API_URL, mascota, Mascota.class);
-    }
-
-    public void actualizarMascota(Long mascotaId, Mascota mascota) {
-        String url = UriComponentsBuilder.fromHttpUrl(API_URL)
-                .pathSegment(mascotaId.toString())
-                .toUriString();
-        restTemplate.put(url, mascota);
-    }
 
 
     public void guardarMascota(Mascota mascota) {

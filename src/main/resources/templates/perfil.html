@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+
+
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <title>Perfil de Usuario</title>
   <style>
@@ -232,6 +235,18 @@
     .logout-btn.edit:hover {
       background-color: #82e0aa; /* Un tono más oscuro al pasar el mouse */
     }
+    div.qr-container {
+        text-align: center;  /* Centra el contenido dentro del div */
+        padding: 20px;  /* Agrega espacio dentro del contenedor */
+        border: 2px solid #ccc;  /* Borde alrededor del contenedor */
+        border-radius: 10px;  /* Bordes redondeados */
+        background-color: #f9f9f9;  /* Color de fondo */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Sombra sutil alrededor del div */
+        margin: 20px auto;  /* Espacio exterior (margen) y centrado */
+        max-width: 250px;  /* Limita el tamaño máximo del contenedor */
+    }
+
+
 
   </style>
 </head>
@@ -272,6 +287,9 @@
           <p><strong>Edad:</strong> <span th:text="${mascota.edad}"></span></p>
           <p><strong>Color:</strong> <span th:text="${mascota.color}"></span></p>
           <p><strong>Observaciones:</strong> <span th:text="${mascota.observaciones}"></span></p>
+          <div class="qr-container">
+            <img th:src="@{/generar_qr/{mascotaId}(mascotaId=${mascota.mascotaId})}" alt="QR de Mascota" class="qr-image">
+          </div>
         </div>
       </div>
     </div>
@@ -286,7 +304,6 @@
         <button>Regresar a la página principal</button>
       </a>
     </div>
-
   </div>
 </div>
 </body>

@@ -62,18 +62,14 @@ public class MascotaController {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
 
         if (usuario != null) {
-            String apiUrl = "https://petsfriends-tw49.onrender.com/api/mascotas/?usuario_id=" + usuario.getUsuarioId();
             List<Usuario> usuarios = usuarioService.obtenerTodosLosUsuarios();
 
-            ResponseEntity<List<Mascota>> response = restTemplate.exchange(apiUrl, HttpMethod.GET, null,
-                    new ParameterizedTypeReference<List<Mascota>>() {});
+            List<Mascota> mascotas = mascotaService.obtenerMascotasPorUsuario(usuario.getUsuarioId());
 
             String imagenUrl = usuario.getFoto();
             if (imagenUrl == null || imagenUrl.isEmpty()) {
                 imagenUrl = "https://res.cloudinary.com/dq2suwtlm/image/upload/v1732582308/user.webp";
             }
-
-            List<Mascota> mascotas = response.getBody();
 
             for (Mascota mascota : mascotas) {
                 if (mascota.getFotom() == null || mascota.getFotom().isEmpty()) {
