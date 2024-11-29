@@ -9,8 +9,10 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import jakarta.persistence.*;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -188,35 +190,60 @@ public class Mascota {
         }
     }
 
-    public byte[] generarCodigoQR() throws WriterException, IOException {
+    public byte[] generarCodigoQRConLogo() throws WriterException, IOException {
+        // Obtenemos los datos de la mascota
         String nombre = this.nombre;
         String edad = this.edad != null ? String.valueOf(this.edad) : "Desconocida";
         String raza = this.raza != null ? this.raza : "Desconocida";
 
+        // Concatenamos los datos para crear un string representativo de la mascota
         String data = "Nombre: " + nombre + ", Edad: " + edad + ", Raza: " + raza;
 
+        // Configuramos los parámetros de generación del código QR
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         Map<EncodeHintType, Object> hints = new HashMap<>();
-        hints.put(EncodeHintType.MARGIN, 1);
+        hints.put(EncodeHintType.MARGIN, 1);  // Espacio en blanco alrededor del QR
 
-        BufferedImage bufferedImage = toBufferedImage(qrCodeWriter.encode(data, BarcodeFormat.QR_CODE, 180, 180, hints));
+        BufferedImage qrImage = toBufferedImage(qrCodeWriter.encode(data, BarcodeFormat.QR_CODE, 180, 180, hints));
 
+        BufferedImage logo = ImageIO.read(new File("C:\\demo\\demo\\src\\main\\resources\\static\\images\\LOGO-PETS0.png"));
+
+        int logoWidth = qrImage.getWidth() / 2;
+        int logoHeight = qrImage.getHeight() / 2;
+        Image scaledLogo = logo.getScaledInstance(logoWidth, logoHeight, Image.SCALE_SMOOTH);
+
+        BufferedImage combinedImage = new BufferedImage(qrImage.getWidth(), qrImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = combinedImage.createGraphics();
+
+        g.drawImage(qrImage, 0, 0, null);
+
+        // Dibuja el logo en el centro del código QR
+        int x = (qrImage.getWidth() - logoWidth) / 2;  // Posición X para centrar
+        int y = (qrImage.getHeight() - logoHeight) / 2; // Posición Y para centrar
+        g.drawImage(scaledLogo, x, y, null);
+
+        // Asegúrate de que el logo no cubra los módulos de la esquina y los patrones de alineación
+        g.dispose();
+
+        // Convertir la imagen a un arreglo de bytes
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(bufferedImage, "PNG", baos);
+        ImageIO.write(combinedImage, "PNG", baos);
         return baos.toByteArray();
     }
 
-    private static BufferedImage toBufferedImage(com.google.zxing.common.BitMatrix matrix) {
+    // Método para convertir el BitMatrix en una imagen BufferedImage
+    private BufferedImage toBufferedImage(com.google.zxing.common.BitMatrix matrix) {
         int width = matrix.getWidth();
         int height = matrix.getHeight();
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 image.setRGB(x, y, matrix.get(x, y) ? 0x000000 : 0xFFFFFF);
             }
         }
+
         return image;
     }
-
 
 }

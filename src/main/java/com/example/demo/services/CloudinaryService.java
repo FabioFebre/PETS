@@ -25,4 +25,6 @@ public class CloudinaryService {
         Map<String, Object> uploadResult = cloudinary.uploader().upload(archivo, new HashMap<>());
         return (String) uploadResult.get("url");
     }
+
+
 }

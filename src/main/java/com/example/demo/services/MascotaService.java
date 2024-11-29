@@ -47,6 +47,14 @@ public class MascotaService {
     }
 
 
+    public void eliminarMascota(Integer mascotaId) throws Exception {
+        Optional<Mascota> mascota = mascotaRepository.findById(mascotaId);
+        if (mascota.isPresent()) {
+            mascotaRepository.delete(mascota.get());
+        } else {
+            throw new Exception("Mascota no encontrada");
+        }
+    }
 
 
     public void guardarMascota(Mascota mascota) {

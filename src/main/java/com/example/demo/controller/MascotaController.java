@@ -31,6 +31,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 @Controller
@@ -56,7 +57,6 @@ public class MascotaController {
         this.detalleVentaService = detalleVentaService;
         this.cloudinaryService = cloudinaryService;
     }
-
     @GetMapping("/perfil")
     public String mostrarPerfil(HttpSession session, Model model) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
@@ -64,19 +64,26 @@ public class MascotaController {
         if (usuario != null) {
             List<Usuario> usuarios = usuarioService.obtenerTodosLosUsuarios();
 
-            List<Mascota> mascotas = mascotaService.obtenerMascotasPorUsuario(usuario.getUsuarioId());
-
+            // Procesar y limpiar la URL de la foto del usuario
             String imagenUrl = usuario.getFoto();
             if (imagenUrl == null || imagenUrl.isEmpty()) {
                 imagenUrl = "https://res.cloudinary.com/dq2suwtlm/image/upload/v1732582308/user.webp";
+            } else {
+                imagenUrl = limpiarRutaImagen(imagenUrl); // Aplicar el método de limpieza
             }
 
+            // Obtener las mascotas y procesar sus URLs de fotos
+            List<Mascota> mascotas = mascotaService.obtenerMascotasPorUsuario(usuario.getUsuarioId());
             for (Mascota mascota : mascotas) {
-                if (mascota.getFotom() == null || mascota.getFotom().isEmpty()) {
+                String fotom = mascota.getFotom();
+                if (fotom == null || fotom.isEmpty()) {
                     mascota.setFotom("https://res.cloudinary.com/dq2suwtlm/image/upload/v1732582308/default_mascota.webp");
+                } else {
+                    mascota.setFotom(limpiarRutaImagen(fotom)); // Aplicar el método de limpieza
                 }
             }
 
+            // Pasar los datos al modelo
             model.addAttribute("usuario", usuario);
             model.addAttribute("mascotas", mascotas);
             model.addAttribute("imagenUrl", imagenUrl);
@@ -87,8 +94,6 @@ public class MascotaController {
             return "login";
         }
     }
-
-
 
     @GetMapping("/mascota/nueva")
     public String mostrarFormularioCrearMascota(HttpSession session, Model model, Object mascota) {
@@ -244,6 +249,38 @@ public class MascotaController {
         session.setAttribute("usuario", usuario);
 
         return "redirect:/perfil";
+    }
+
+    public String limpiarRutaImagen(String url) {
+        if (url != null && url.contains("image/upload/")) {
+            return url.replace("image/upload/", "");
+        }
+        return url;
+    }
+
+
+    @DeleteMapping("/mascota/eliminar/{mascotaId}")
+    public String eliminarMascota(@PathVariable Integer mascotaId, HttpSession session, Model model) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+        if (usuario != null) {
+            try {
+                Optional<Mascota> mascota = mascotaService.obtenerMascotaPorId(mascotaId);
+                if (mascota.isPresent() && mascota.get().getUsuarioId().equals(usuario.getUsuarioId())) {
+                    mascotaService.eliminarMascota(mascotaId);
+                    model.addAttribute("successMessage", "Mascota eliminada exitosamente.");
+                } else {
+                    model.addAttribute("errorMessage", "Mascota no encontrada o no pertenece a tu cuenta.");
+                }
+                return "redirect:/perfil";
+            } catch (Exception e) {
+                model.addAttribute("errorMessage", e.getMessage());
+                return "redirect:/perfil";
+            }
+        } else {
+            model.addAttribute("errorMessage", "Debes iniciar sesión para eliminar una mascota.");
+            return "login";
+        }
     }
 
 

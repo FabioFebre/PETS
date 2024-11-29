@@ -290,6 +290,12 @@
           <div class="qr-container">
             <img th:src="@{/generar_qr/{mascotaId}(mascotaId=${mascota.mascotaId})}" alt="QR de Mascota" class="qr-image">
           </div>
+          <form th:action="@{/mascota/eliminar/{mascotaId}(mascotaId=${mascota.mascotaId})}" method="post">
+            <input type="hidden" name="_method" value="delete"/>
+            <button type="submit" class="btn btn-danger">Eliminar Mascota</button>
+          </form>
+
+
         </div>
       </div>
     </div>
