@@ -4,14 +4,18 @@
     <meta charset="UTF-8">
     <title>Actualizar Usuario</title>
     <style>
+        /* Aseguramos que el body ocupe todo el alto y permita desplazarse si el contenido es mayor */
         body {
             font-family: Arial, sans-serif;
             background-color: #f1f1f1;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
+            align-items: flex-start; /* Cambiar para alinear al principio */
+            min-height: 100vh;
             margin: 0;
+            padding: 20px; /* Añadir un poco de espacio alrededor */
+            box-sizing: border-box;
+            overflow-y: auto; /* Permitir desplazamiento */
         }
 
         form {
@@ -19,7 +23,9 @@
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 600px;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box; /* Asegura que el padding no se sobreponga al ancho */
         }
 
         h1 {
@@ -42,6 +48,7 @@
             border-radius: 5px;
             font-size: 14px;
             margin-bottom: 15px;
+            box-sizing: border-box;
         }
 
         input[type="text"]:focus, input[type="email"]:focus, input[type="date"]:focus, input[type="file"]:focus {
@@ -75,29 +82,50 @@
 <form action="/usuario/actualizar" method="post" enctype="multipart/form-data">
     <input type="hidden" name="_csrf" value="${_csrf.token}"/>
 
-    <label for="nombres">Nombres:</label>
-    <input type="text" name="nombres" value="" required />
 
-    <label for="apellidos">Apellidos:</label>
-    <input type="text" name="apellidos" value="" required />
+    <div>
+        <label for="nombres">Nombres:</label>
+        <input type="text" name="nombres" id="nombres" placeholder="Ingresa el nombre" maxlength="14"
+               oninput="this.value = this.value.replace(/[^A-Za-zÁáÉéÍíÓóÚúÑñ ]/g, '');" required />
+    </div>
 
-    <label for="correo">Correo:</label>
-    <input type="email" name="correo" value="" required />
 
-    <label for="username">Username:</label>
-    <input type="text" name="username" value="" required />
+    <div>
+        <label for="apellidos">Apellidos:</label>
+        <input type="text" name="apellidos" id="apellidos" placeholder="Ingresa los apellidos" maxlength="14"
+               oninput="this.value = this.value.replace(/[^A-Za-zÁáÉéÍíÓóÚúÑñ ]/g, '');" required />
+    </div>
+
+
+    <div>
+        <label for="correo">Correo:</label>
+        <input type="email" name="correo" id="correo" value="" placeholder="Ingresa tu correo" required
+               pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Por favor ingresa un correo válido con @." />
+    </div>
+
+
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" placeholder="Ingresa tu username" maxlength="8"
+               oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '');" required />
+    </div>
+
 
     <label for="fechaNacimiento">Fecha de Nacimiento:</label>
     <input type="date" name="fechaNacimiento" value="" required />
 
-    <label for="telefono">Teléfono:</label>
-    <input type="text" name="telefono" value="" required />
+    <div>
+        <label for="telefono">Teléfono:</label>
+        <input type="text" name="telefono" id="telefono" placeholder="Ingresa tu número de teléfono" maxlength="10"
+               oninput="this.value = this.value.replace(/[^0-9]/g, '');" required />
+    </div>
+
 
     <label for="direccion">Dirección:</label>
     <input type="text" name="direccion" value="" required />
 
     <label for="foto">Foto:</label>
-    <input type="file" name="foto" accept="image/*" />
+    <input type="file" name="foto" accept="image/*" required />
 
     <button type="submit">Actualizar</button>
 </form>

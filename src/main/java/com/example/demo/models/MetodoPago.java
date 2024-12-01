@@ -9,13 +9,20 @@ public class MetodoPago {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "metodo_id")
-    private Long metodo_id;
+    private Long metodoId;
 
     @Column(name = "nombre", length = 20, unique = true, nullable = false)
     private String nombre;
 
     public MetodoPago() {}
 
+    public Long getMetodoId() {
+        return metodoId;
+    }
+
+    public void setMetodoId(Long metodoId) {
+        this.metodoId = metodoId;
+    }
 
     public String getNombre() {
         return nombre;
@@ -28,13 +35,5 @@ public class MetodoPago {
     @Override
     public String toString() {
         return nombre;
-    }
-
-    public Long getMetodo_id() {
-        return metodo_id;
-    }
-
-    public void setMetodo_id(Long metodo_id) {
-        this.metodo_id = metodo_id;
     }
 }

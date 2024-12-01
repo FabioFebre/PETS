@@ -23,13 +23,6 @@ public class MascotaService {
     @Autowired
     private MascotaRepository mascotaRepository;
 
-    public MascotaService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
-
-    @Autowired
-    private RestTemplate restTemplate;
-
 
     public List<Mascota> obtenerMascotasPorUsuario(int usuarioId) {
         return mascotaRepository.findByUsuarioId(usuarioId);
@@ -59,6 +52,29 @@ public class MascotaService {
 
     public void guardarMascota(Mascota mascota) {
         mascotaRepository.save(mascota);
+    }
+
+
+    public Mascota actualizarMascota(int id, Mascota mascotaActualizada) {
+        Mascota mascotaExistente = mascotaRepository.findById(id).orElse(null);
+
+        if (mascotaExistente == null) {
+            throw new RuntimeException("Mascota con ID " + id + " no encontrada.");
+        }
+
+        mascotaExistente.setNombre(mascotaActualizada.getNombre());
+        mascotaExistente.setEspecie(mascotaActualizada.getEspecie());
+        mascotaExistente.setRaza(mascotaActualizada.getRaza());
+        mascotaExistente.setFechaNacimiento(mascotaActualizada.getFechaNacimiento());
+        mascotaExistente.setPeso(mascotaActualizada.getPeso());
+        mascotaExistente.setAltura(mascotaActualizada.getAltura());
+        mascotaExistente.setEdad(mascotaActualizada.getEdad());
+        mascotaExistente.setColor(mascotaActualizada.getColor());
+        mascotaExistente.setFotom(mascotaActualizada.getFotom());
+        mascotaExistente.setObservaciones(mascotaActualizada.getObservaciones());
+
+        // Guardamos y retornamos la mascota actualizada
+        return mascotaRepository.save(mascotaExistente);
     }
 
 

@@ -42,5 +42,8 @@ public class UsuarioService {
 
         return usuarioRepository.save(usuarioExistente);
     }
+    public Usuario obtenerUsuarioPorId(Integer id) {
+        return usuarioRepository.findById(id).orElse(null);
+    }
 
 }

@@ -16,13 +16,12 @@ public class Venta {
 
     @ManyToOne
     @JoinColumn(name = "metodo_pago_id", nullable = false)
-    private MetodoPago metodo_id;
+    private MetodoPago metodoPago;
 
-    @Column(name = "numero_tarjeta", length = 16, nullable = true)
+    @Column(name = "numero_tarjeta", length = 16)
     private String numeroTarjeta;
 
-
-    @Column(name = "correo", nullable = true)
+    @Column(name = "correo")
     private String correo;
 
     @Column(name = "fecha_expiracion")
@@ -40,43 +39,31 @@ public class Venta {
     private Usuario usuario;
 
     @Column(name = "subtotal", precision = 10, scale = 2, nullable = false)
-    private BigDecimal subtotal = BigDecimal.ZERO;
+    private BigDecimal subtotal;
 
     @Column(name = "total", precision = 10, scale = 2, nullable = false)
-    private BigDecimal total = BigDecimal.ZERO;
+    private BigDecimal total;
+
+
 
     @Column(name = "fecha_venta", updatable = false)
     private LocalDateTime fechaCompra = LocalDateTime.now();
 
+
     public Venta() {}
-
-    public BigDecimal calcularSubtotal() {
-        if (carrito != null) {
-            List<DetalleVenta> detalles = carrito.getDetalles();
-            subtotal = detalles.stream()
-                    .map(detalle -> detalle.getPrecio().multiply(BigDecimal.valueOf(detalle.getCantidad())))
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-        }
-        return subtotal;
-    }
-
-    @PrePersist
-    @PreUpdate
-    private void preSave() {
-        this.subtotal = calcularSubtotal();
-        this.total = subtotal;
-    }
-
-    @Override
-    public String toString() {
-        return "Transaccion " + id + " - Usuario: " + usuario.getUsername();
-    }
 
     // Getters y Setters
     public Long getId() {
         return id;
     }
 
+    public MetodoPago getMetodoPago() {
+        return metodoPago;
+    }
+
+    public void setMetodoPago(MetodoPago metodoPago) {
+        this.metodoPago = metodoPago;
+    }
 
     public String getNumeroTarjeta() {
         return numeroTarjeta;
@@ -130,34 +117,25 @@ public class Venta {
         return subtotal;
     }
 
+    public BigDecimal getTotal() {
+        return total;
+    }
     public void setSubtotal(BigDecimal subtotal) {
         this.subtotal = subtotal;
     }
 
-    public BigDecimal getTotal() {
-        return total;
-    }
 
     public void setTotal(BigDecimal total) {
         this.total = total;
     }
 
-
-
-    public MetodoPago getMetodo_id() {
-        return metodo_id;
-    }
-
-    public void setMetodo_id(MetodoPago metodo_id) {
-        this.metodo_id = metodo_id;
-    }
-
-
     public LocalDateTime getFechaCompra() {
-        return fechaCompra;
+        return fechaCompra; // Asegúrate de incluir el getter para fechaCompra
     }
 
-    public void setFechaCompra(LocalDateTime fechaCompra) {
-        this.fechaCompra = fechaCompra;
+
+    @Override
+    public String toString() {
+        return "Transaccion " + id + " - Usuario: " + usuario.getUsername();
     }
 }

@@ -1,7 +1,6 @@
 package com.example.demo.models;
 
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonBackReference;  // Importa la anotación
 
 import java.math.BigDecimal;
 
@@ -13,21 +12,31 @@ public class ProductoCarrito {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Integer cantidad;
+    private int cantidad;
 
-    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal precio;
 
+
+    public ProductoCarrito() {}
     @ManyToOne
     @JoinColumn(name = "carrito_id")
-    @JsonBackReference
     private Carrito carrito;
 
     @ManyToOne
     @JoinColumn(name = "producto_id", nullable = false)
     private Producto producto;
 
+    @Override
+    public String toString() {
+        return cantidad + " de " + producto.getNombre() + " en el carrito";
+    }
+
+    public ProductoCarrito(Carrito carrito, Producto producto, int cantidad) {
+        this.carrito = carrito;
+        this.producto = producto;
+        this.cantidad = cantidad;
+        this.precio = producto.getPrecio().multiply(BigDecimal.valueOf(cantidad)); // Calcula el precio total
+    }
     // Getters y setters
     public Long getId() {
         return id;

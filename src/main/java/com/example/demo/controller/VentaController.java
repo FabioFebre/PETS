@@ -2,8 +2,12 @@ package com.example.demo.controller;
 
 import com.example.demo.models.*;
 import com.example.demo.repository.DetalleCarritoRepository;
+import com.example.demo.repository.ProductoCarritoRepository;
+import com.example.demo.repository.VentaRepository;
 import com.example.demo.services.*;
 import jakarta.servlet.http.HttpSession;
+import com.example.demo.models.DetalleCarrito;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,157 +17,114 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class VentaController {
 
-    private final UsuarioService usuarioService;
+    @Autowired
+    private UsuarioService usuarioService;
     private final MetodoPagoService metodoPagoService;
+    private final ProductoCarritoService productoCarritoService;
+
     @Autowired
-    private ProductoCarritoService productoCarritoService;
+    private VentaRepository ventaRepository;
     private final CarritoService carritoService;
+    @Autowired
+    private DetalleCarritoRepository detalleCarritoRepository;
+    @Autowired
+    private ProductoCarritoRepository productoCarritoRepository;
+    @Autowired
+    private DetalleCarritoService detalleCarritoService;
     private final VentaService ventaService;
-    private final DetalleVentaService detalleVentaService;
-    @Autowired
-    private ProductoService productoService;
-
 
     @Autowired
-    public VentaController(UsuarioService usuarioService, MetodoPagoService metodoPagoService,
-                           CarritoService carritoService, DetalleCarritoService detalleCarritoService,
-                           VentaService ventaService, ProductoCarritoService productoCarritoService, DetalleVentaService detalleVentaService) {
-        this.usuarioService = usuarioService;
+
+
+    public VentaController(MetodoPagoService metodoPagoService, ProductoCarritoService productoCarritoService, CarritoService carritoService, VentaService ventaService) {
         this.metodoPagoService = metodoPagoService;
+        this.productoCarritoService = productoCarritoService;
         this.carritoService = carritoService;
         this.ventaService = ventaService;
-        this.productoCarritoService = productoCarritoService;
-        this.detalleVentaService = detalleVentaService;
-
     }
+
 
     @GetMapping("/pago")
     public String mostrarTransaccion(HttpSession session, Model model) {
-        // Obtener usuario de la sesión
         Usuario usuario = (Usuario) session.getAttribute("usuario");
 
         if (usuario != null) {
-            // Obtener carrito, productos y calcular subtotal y total
-            Carrito carrito = carritoService.obtenerCarritoPorUsuario(usuario);
-            List<ProductoCarrito> productosCarrito = productoCarritoService.obtenerProductosCarrito(carrito.getId(), usuario.getUsuarioId());
-            List<Producto> productos = productoService.obtenerTodosLosProductos();
+            Carrito carrito = carritoService.obtenerContenidoCarrito(usuario);
 
+            BigDecimal total = BigDecimal.ZERO;
             BigDecimal subtotal = BigDecimal.ZERO;
-            for (ProductoCarrito productoCarrito : productosCarrito) {
-                BigDecimal precioUnitario = productoCarrito.getProducto().getPrecio();
-                BigDecimal cantidad = BigDecimal.valueOf(productoCarrito.getCantidad());
-                subtotal = subtotal.add(precioUnitario.multiply(cantidad));
+            int totalProductos = 0;
+
+            // Comprobar si el carrito no es nulo y tiene productos
+            if (carrito != null && carrito.getProductoCarrito() != null) {
+                totalProductos = carrito.getProductoCarrito().stream()
+                        .mapToInt(ProductoCarrito::getCantidad)
+                        .sum();
+
+                subtotal = carrito.getProductoCarrito().stream()
+                        .map(productoCarrito -> productoCarrito.getPrecio()
+                                .multiply(new BigDecimal(productoCarrito.getCantidad())))
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
             }
-
-
-            BigDecimal igv = subtotal.multiply(BigDecimal.valueOf(0.10));
-            BigDecimal total = subtotal.add(igv);
-
-            // Obtener métodos de pago
-            List<MetodoPago> metodosPago = metodoPagoService.obtenerTodosLosMetodos();
-
-            // Agregar los atributos al modelo
-            model.addAttribute("total", total);
-            model.addAttribute("productos", productos);
             model.addAttribute("usuario", usuario);
-            model.addAttribute("carrito", carrito);
-            model.addAttribute("productosCarrito", productosCarrito);
-            model.addAttribute("carritoId", carrito.getId());
-            model.addAttribute("usuarioId", usuario.getUsuarioId());
+            model.addAttribute("totalProductos", totalProductos);
             model.addAttribute("subtotal", subtotal);
-            session.setAttribute("usuario", usuario);
-            model.addAttribute("metodosPago", metodosPago);
-
-            return "transaccion"; // Retorna la vista
+            model.addAttribute("detalles", carrito.getProductoCarrito());
+            model.addAttribute("carrito", carrito);
+            return "transaccion";
         } else {
             model.addAttribute("errorMessage", "Debes iniciar sesión para acceder al carrito.");
             return "login";
         }
     }
 
+
+
+
     @PostMapping("/nuevaTransaccion")
-    public String procesarPago(@RequestParam BigDecimal subtotal,
-                               @RequestParam BigDecimal total,
-                               @RequestParam("metodoPagoId") Long metodoPagoId,
-                               @RequestParam(value = "numeroTarjeta", required = false) String numeroTarjeta,
-                               @RequestParam(value = "correo", required = false) String correo,
-                               @RequestParam(value = "fechaExpiracion", required = false) LocalDate fechaExpiracion,
-                               @RequestParam(value = "cvv", required = false) String cvv,
-                               HttpSession session, Model model) {
-        // Obtener usuario de la sesión
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
+    public String registrarTransaccion(@RequestParam("metodoPagoId") Long metodoPagoId,
+                                       @RequestParam("numeroTarjeta") String numeroTarjeta,
+                                       @RequestParam("correo") String correo,
+                                       @RequestParam("fechaExpiracion") String fechaExpiracion,
+                                       @RequestParam("cvv") String cvv,
+                                       @RequestParam("usuarioId") Integer usuarioId,
+                                       @RequestParam("carritoId") Long carritoId,
+                                       @RequestParam("subtotal") BigDecimal subtotal,
+                                       Model model) {
+        Venta nuevaTransaccion = new Venta();
 
-        if (usuario == null) {
-            model.addAttribute("errorMessage", "Debes iniciar sesión para realizar una compra.");
-            return "login";
-        }
+        MetodoPago metodoPago = metodoPagoService.obtenerMetodoPorId(metodoPagoId)
+                .orElseThrow(() -> new RuntimeException("Método de pago no encontrado"));
+        nuevaTransaccion.setMetodoPago(metodoPago);
 
-        // Obtener carrito del usuario
-        Carrito carrito = carritoService.obtenerCarritoPorUsuario(usuario);
-        if (carrito == null || carrito.getProductoCarrito().isEmpty()) {
-            model.addAttribute("errorMessage", "Tu carrito está vacío.");
-            return "carrito";
-        }
+        nuevaTransaccion.setNumeroTarjeta(numeroTarjeta);
+        nuevaTransaccion.setCorreo(correo);
+        nuevaTransaccion.setFechaExpiracion(LocalDate.parse(fechaExpiracion));
+        nuevaTransaccion.setCvv(cvv);
+        nuevaTransaccion.setSubtotal(subtotal);
 
-        // Verificar método de pago
-        MetodoPago metodoPago = metodoPagoService.obtenerMetodoPorId(metodoPagoId);
-        if (metodoPago == null) {
-            model.addAttribute("errorMessage", "Método de pago no válido.");
-            return "transaccion";
-        }
+        BigDecimal total = subtotal.multiply(BigDecimal.valueOf(1.10));
+        nuevaTransaccion.setTotal(total);
 
-        Venta venta = new Venta();
-        venta.setUsuario(usuario);
-        venta.setMetodo_id(metodoPago);
-        venta.setCarrito(carrito);
-        venta.setSubtotal(subtotal);
-        venta.setTotal(total);
+        Usuario usuario = usuarioService.obtenerUsuarioPorId(usuarioId);
+        Carrito carrito = carritoService.obtenerCarritoPorId(carritoId)
+                .orElseThrow(() -> new RuntimeException("Carrito no encontrado"));
+        nuevaTransaccion.setCarrito(carrito);
+        nuevaTransaccion.setUsuario(usuario);
 
-        if ("PayPal".equalsIgnoreCase(metodoPago.getNombre())) {
-            if (correo == null || correo.isEmpty()) {
-                model.addAttribute("errorMessage", "El correo de PayPal es obligatorio.");
-                return "transaccion";
-            }
-            venta.setCorreo(correo);
-        } else {
-            // Manejar pagos con tarjeta
-            if ( fechaExpiracion == null || cvv == null) {
-                model.addAttribute("errorMessage", "Todos los campos de la tarjeta son obligatorios.");
-                return "transaccion";
-            }
-            venta.setNumeroTarjeta(numeroTarjeta);
-            venta.setFechaExpiracion(fechaExpiracion);
-            venta.setCvv(cvv);
-        }
+        ventaRepository.save(nuevaTransaccion);
 
-        // Guardar venta y detalles
-        ventaService.guardarVenta(venta);
-        List<DetalleVenta> detallesVenta = new ArrayList<>();
-        for (ProductoCarrito productoCarrito : carrito.getProductoCarrito()) {
-            DetalleVenta detalle = new DetalleVenta();
-            detalle.setProducto(productoCarrito.getProducto());
-            detalle.setCantidad(productoCarrito.getCantidad());
-            detalle.setPrecio(productoCarrito.getProducto().getPrecio());
-            detalle.setVenta(venta);
-            detallesVenta.add(detalle);
-        }
-        detalleVentaService.guardarDetallesVenta(carrito, detallesVenta);
+        productoCarritoService.eliminarProductosDelCarrito(carrito.getId());
 
-        // Limpiar el carrito
-        productoCarritoService.eliminarProductosDelCarritoId(carrito.getId());
-
-        // Mostrar mensaje de éxito
-        model.addAttribute("mensajeExito", "Compra realizada exitosamente.");
         return "redirect:/carrito";
     }
-
-
 
 
 }

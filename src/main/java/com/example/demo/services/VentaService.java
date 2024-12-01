@@ -16,13 +16,11 @@ import java.util.List;
 @Service
 public class VentaService {
 
-    private final RestTemplate restTemplate;
 
     private final VentaRepository ventaRepository;
 
     @Autowired
-    public VentaService(RestTemplate restTemplate, VentaRepository ventaRepository) {
-        this.restTemplate = restTemplate;
+    public VentaService(VentaRepository ventaRepository) {
         this.ventaRepository = ventaRepository;
     }
 

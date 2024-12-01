@@ -2,75 +2,78 @@ package com.example.demo.services;
 
 import com.example.demo.models.Carrito;
 import com.example.demo.models.DetalleCarrito;
+import com.example.demo.models.Producto;
 import com.example.demo.models.ProductoCarrito;
-
+import com.example.demo.repository.CarritoRepository;
 import com.example.demo.repository.DetalleCarritoRepository;
 import com.example.demo.repository.ProductoCarritoRepository;
+import com.example.demo.repository.ProductoRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.Arrays;
-import java.util.List;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.Optional;
 
 @Service
 public class ProductoCarritoService {
 
-    private final RestTemplate restTemplate;
-
-    @Autowired
-    private DetalleCarritoRepository detalleCarritoRepository;
     @Autowired
     private ProductoCarritoRepository productoCarritoRepository;
 
     @Autowired
-    public ProductoCarritoService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
+    private DetalleCarritoRepository detalleCarritoRepository;
 
+    @Autowired
+    private ProductoRepository productoRepository;
 
-    public List<ProductoCarrito> obtenerProductosCarrito(Long carritoId , int usuarioId ) {
-        return productoCarritoRepository.findByCarritoId(carritoId);
-    }
+    @Autowired
+    private CarritoRepository carritoRepository;
 
+    public void agregarProductoAlCarrito(Long productoId, int cantidad, Long carritoId) {
+        Carrito carrito = carritoRepository.findById(carritoId)
+                .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
 
-    public void guardarProductoCarrito(ProductoCarrito productoCarrito) {
+        Producto producto = productoRepository.findById(productoId)
+                .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
+
+        BigDecimal precioTotal = producto.getPrecio().multiply(new BigDecimal(cantidad));
+
+        Optional<ProductoCarrito> productoCarritoOpt = productoCarritoRepository.findByCarritoAndProducto(carrito, producto);
+
+        ProductoCarrito productoCarrito;
+        if (productoCarritoOpt.isPresent()) {
+            productoCarrito = productoCarritoOpt.get();
+            productoCarrito.setCantidad(productoCarrito.getCantidad() + cantidad);
+        } else {
+            productoCarrito = new ProductoCarrito();
+            productoCarrito.setCarrito(carrito);
+            productoCarrito.setProducto(producto);
+            productoCarrito.setCantidad(cantidad);
+        }
+
         productoCarritoRepository.save(productoCarrito);
+
+        Optional<DetalleCarrito> detalleExistenteOpt = detalleCarritoRepository.findByCarritoAndProducto(carrito, producto);
+
+        if (detalleExistenteOpt.isPresent()) {
+            DetalleCarrito detalleExistente = detalleExistenteOpt.get();
+            detalleExistente.setCantidad(detalleExistente.getCantidad() + cantidad);
+            detalleExistente.setPrecio(detalleExistente.getPrecio().add(precioTotal));
+            detalleCarritoRepository.save(detalleExistente);
+        } else {
+            DetalleCarrito detalleCarrito = new DetalleCarrito();
+            detalleCarrito.setCarrito(carrito);
+            detalleCarrito.setProducto(producto);
+            detalleCarrito.setCantidad(cantidad);
+            detalleCarrito.setPrecio(precioTotal);
+            detalleCarritoRepository.save(detalleCarrito);
+        }
     }
 
 
-
-
     @Transactional
-    public void eliminarProductoDelCarrito(Carrito carrito, Long producto_id) {
-        productoCarritoRepository.deleteByCarritoIdAndProductoId(carrito.getId(), producto_id);
-    }
-
-
-    @Transactional
-    public void eliminarProductosDelCarritoId(Long carritoId) {
+    public void eliminarProductosDelCarrito(Long carritoId) {
         productoCarritoRepository.deleteByCarritoId(carritoId);
     }
-
-
-    @Transactional
-    public ProductoCarrito agregarProductoAlCarrito(ProductoCarrito productoCarrito) {
-        ProductoCarrito productoGuardado = productoCarritoRepository.save(productoCarrito);
-
-        DetalleCarrito detalleCarrito = new DetalleCarrito();
-        detalleCarrito.setCarrito(productoCarrito.getCarrito());
-        detalleCarrito.setProducto(productoCarrito.getProducto());
-        detalleCarrito.setCantidad(productoCarrito.getCantidad());
-
-        detalleCarritoRepository.save(detalleCarrito);
-
-        return productoGuardado;
-    }
-
-
-
 }

@@ -116,36 +116,51 @@
   <form th:action="@{/mascota/crear}" th:object="${mascota}" method="POST" enctype="multipart/form-data">
     <div>
       <label for="nombre">Nombre:</label>
-      <input type="text" th:field="*{nombre}" id="nombre" placeholder="Ingresa el nombre de la mascota" />
+      <input type="text" th:field="*{nombre}" id="nombre" placeholder="Ingresa el nombre de la mascota"
+             maxlength="10" oninput="this.value = this.value.replace(/[^A-Za-zÁáÉéÍíÓóÚúÑñ ]/g, '');" required />
     </div>
+
     <div>
       <label for="especie">Especie:</label>
-      <input type="text" th:field="*{especie}" id="especie" placeholder="Ingresa la especie" />
+      <input type="text" th:field="*{especie}" id="especie" placeholder="Ingresa la especie"
+             maxlength="8" oninput="this.value = this.value.replace(/[^A-Za-zÁáÉéÍíÓóÚúÑñ ]/g, '');" required />
     </div>
+
     <div>
       <label for="raza">Raza:</label>
-      <input type="text" th:field="*{raza}" id="raza" placeholder="Ingresa la raza" />
+      <input type="text" th:field="*{raza}" id="raza" placeholder="Ingresa la raza"
+             maxlength="8" oninput="this.value = this.value.replace(/[^A-Za-zÁáÉéÍíÓóÚúÑñ ]/g, '');" required />
     </div>
+
     <div>
       <label for="fechaNacimiento">Fecha de Nacimiento:</label>
       <input type="date" th:field="*{fechaNacimiento}" id="fechaNacimiento" />
     </div>
     <div>
       <label for="peso">Peso:</label>
-      <input type="text" th:field="*{peso}" id="peso" placeholder="Ingresa el peso" />
+      <input type="number" th:field="*{peso}" id="peso" placeholder="Ingresa el peso"
+             min="0" step="1" required />
     </div>
+
     <div>
       <label for="altura">Altura:</label>
-      <input type="text" th:field="*{altura}" id="altura" placeholder="Ingresa la altura" />
+      <input type="number" th:field="*{altura}" id="altura" placeholder="Ingresa la altura"
+             min="0" step="0.01" required />
     </div>
     <div>
       <label for="color">Color:</label>
-      <input type="text" th:field="*{color}" id="color" placeholder="Ingresa el color" />
+      <input type="text" th:field="*{color}" id="color" placeholder="Ingresa el color"
+             maxlength="6" oninput="this.value = this.value.replace(/[^A-Za-zÁáÉéÍíÓóÚúÑñ ]/g, '');" required />
     </div>
+
     <div>
       <label for="edad">Edad:</label>
-      <input type="text" th:field="*{edad}" id="edad" placeholder="Ingresa la edad" />
+      <input type="number" th:field="*{edad}" id="edad" placeholder="Ingresa la edad"
+             min="0" max="99" step="1" required
+             oninput="if(this.value.length > 2) this.value = this.value.slice(0, 2)" />
     </div>
+
+
     <div>
       <label for="observaciones">Observaciones:</label>
       <input type="text" th:field="*{observaciones}" id="observaciones" placeholder="Observaciones adicionales" />
@@ -153,7 +168,7 @@
 
     <div>
       <label for="fotom">Foto (opcional):</label>
-      <input type="file" th:field="*{fotom}" id="fotom" accept="image/*" />
+      <input type="file" th:field="*{fotom}" id="fotom" accept="image/*" required/>
     </div>
 
     <div class="buttons-container">

@@ -195,9 +195,10 @@ public class Mascota {
         String nombre = this.nombre;
         String edad = this.edad != null ? String.valueOf(this.edad) : "Desconocida";
         String raza = this.raza != null ? this.raza : "Desconocida";
+        String codigoIdentificacion = this.codigoIdentificacion;
 
         // Concatenamos los datos para crear un string representativo de la mascota
-        String data = "Nombre: " + nombre + ", Edad: " + edad + ", Raza: " + raza;
+        String data = "Este es el codigo de Identificacion de tu Mascota : " + codigoIdentificacion ;
 
         // Configuramos los parámetros de generación del código QR
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
