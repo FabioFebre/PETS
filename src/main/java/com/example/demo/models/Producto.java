@@ -24,7 +24,7 @@ public class Producto {
     @Column(name = "stock", nullable = false)
     private int stock;
 
-    // Relación con CategoriaProducto
+    @lombok.Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_producto_id_id", referencedColumnName = "categoria_producto_id", nullable = false)
     @JsonIgnore
@@ -63,10 +63,6 @@ public class Producto {
 
     public CategoriaProducto getCategoriaProducto() {
         return categoriaProducto;
-    }
-
-    public void setCategoriaProducto(CategoriaProducto categoriaProducto) {
-        this.categoriaProducto = categoriaProducto;
     }
 
     public int getStock() {

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
@@ -38,9 +39,22 @@ public class HomeController {
             List<Producto> productos = productoService.obtenerTodosLosProductos();
             List<Veterinario> veterinarios = veterinarioService.getAllVeterinarios();
 
+            List<Producto> productosActivos = productos.stream()
+                    .filter(producto -> Boolean.TRUE.equals(producto.getEstado()))
+                    .collect(Collectors.toList());
+
+            for (Producto producto : productos) {
+                String imagen = producto.getImagen();
+                if (imagen == null || imagen.isEmpty()) {
+                    producto.setImagen("https://res.cloudinary.com/dq2suwtlm/image/upload/v1732582308/default_producto.webp");
+                } else {
+                    producto.setImagen(limpiarRutaImagen(imagen));
+                }
+            }
+
             model.addAttribute("usuario", usuario);
             model.addAttribute("servicios", servicios);
-            model.addAttribute("productos", productos);
+            model.addAttribute("productos", productosActivos);
             model.addAttribute("veterinarios", veterinarios);
 
 
@@ -48,5 +62,11 @@ public class HomeController {
         }
 
         return "login";
+    }
+    private String limpiarRutaImagen(String ruta) {
+        if (!ruta.startsWith("https://")) {
+            return "https://res.cloudinary.com/dq2suwtlm/" + ruta;
+        }
+        return ruta;
     }
 }

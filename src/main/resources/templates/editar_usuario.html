@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Actualizar Usuario</title>
     <style>
-        /* Aseguramos que el body ocupe todo el alto y permita desplazarse si el contenido es mayor */
+        /* Estilo base */
         body {
             font-family: Arial, sans-serif;
             background-color: #f1f1f1;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Cambiar para alinear al principio */
+            align-items: flex-start; /* Alinear al inicio */
             min-height: 100vh;
             margin: 0;
-            padding: 20px; /* Añadir un poco de espacio alrededor */
+            padding: 20px;
             box-sizing: border-box;
-            overflow-y: auto; /* Permitir desplazamiento */
+            overflow-y: auto; /* Permitir desplazamiento vertical */
         }
 
         form {
@@ -25,7 +25,7 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 600px;
-            box-sizing: border-box; /* Asegura que el padding no se sobreponga al ancho */
+            box-sizing: border-box;
         }
 
         h1 {
@@ -70,18 +70,65 @@
             background-color: #45a049;
         }
 
-        p {
-            color: red;
-            text-align: center;
-            font-size: 14px;
-            margin-top: 20px;
+        /* Responsividad para pantallas medianas */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            form {
+                padding: 20px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            button {
+                font-size: 14px;
+                padding: 10px;
+            }
         }
+
+        /* Responsividad para pantallas pequeñas */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            input[type="text"], input[type="email"], input[type="date"], input[type="file"] {
+                padding: 8px;
+                font-size: 12px;
+            }
+
+            button {
+                font-size: 12px;
+                padding: 8px;
+            }
+        }
+        .error-message {
+            background-color: #f8d7da; /* Fondo rojo claro */
+            color: #721c24; /* Texto rojo oscuro */
+            border: 1px solid #f5c6cb; /* Borde gris claro */
+            border-radius: 10px; /* Bordes redondeados */
+            padding: 20px; /* Espaciado dentro del div */
+            font-size: 16px; /* Tamaño de fuente */
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+        }
+
+        .error-message p {
+            margin: 0;
+        }
+
     </style>
 </head>
 <body>
 <form action="/usuario/actualizar" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+    <input type="hidden" name="_csrf" value="${_csrf.token}" />
+    <div th:if="${errorMessage}" class="error-message">
+        <p th:text="${errorMessage}"></p>
+    </div>
 
+
+
+    <h1>Actualizar Usuario</h1>
 
     <div>
         <label for="nombres">Nombres:</label>
@@ -89,30 +136,28 @@
                oninput="this.value = this.value.replace(/[^A-Za-zÁáÉéÍíÓóÚúÑñ ]/g, '');" required />
     </div>
 
-
     <div>
         <label for="apellidos">Apellidos:</label>
         <input type="text" name="apellidos" id="apellidos" placeholder="Ingresa los apellidos" maxlength="14"
                oninput="this.value = this.value.replace(/[^A-Za-zÁáÉéÍíÓóÚúÑñ ]/g, '');" required />
     </div>
 
-
     <div>
         <label for="correo">Correo:</label>
-        <input type="email" name="correo" id="correo" value="" placeholder="Ingresa tu correo" required
+        <input type="email" name="correo" id="correo" placeholder="Ingresa tu correo" required
                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Por favor ingresa un correo válido con @." />
     </div>
 
-
     <div>
         <label for="username">Username:</label>
-        <input type="text" name="username" id="username" placeholder="Ingresa tu username" maxlength="8"
+        <input type="text" name="username" id="username" placeholder="Ingresa tu username" maxlength="15"
                oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '');" required />
     </div>
 
-
-    <label for="fechaNacimiento">Fecha de Nacimiento:</label>
-    <input type="date" name="fechaNacimiento" value="" required />
+    <div>
+        <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+        <input type="date" name="fechaNacimiento" required />
+    </div>
 
     <div>
         <label for="telefono">Teléfono:</label>
@@ -120,15 +165,17 @@
                oninput="this.value = this.value.replace(/[^0-9]/g, '');" required />
     </div>
 
+    <div>
+        <label for="direccion">Dirección:</label>
+        <input type="text" name="direccion" placeholder="Ingresa tu dirección" required />
+    </div>
 
-    <label for="direccion">Dirección:</label>
-    <input type="text" name="direccion" value="" required />
-
-    <label for="foto">Foto:</label>
-    <input type="file" name="foto" accept="image/*" required />
+    <div>
+        <label for="foto">Foto:</label>
+        <input type="file" name="foto" accept="image/*" required />
+    </div>
 
     <button type="submit">Actualizar</button>
 </form>
-
 </body>
 </html>

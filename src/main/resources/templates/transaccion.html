@@ -4,150 +4,241 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Transacción</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+      color: #495057;
     }
     header, footer {
-      background-color: #343a40;
-      color: #ffffff;
+      background-color: #5499c7;
+      color: white;
       text-align: center;
-      padding: 1em;
+      padding: 20px 0;
+      font-size: 1.2rem;
+    }
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 15px;
+    }
+    .form-container, .cart-container {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      transition: all 0.3s ease-in-out;
+      flex: 1;
+    }
+    .form-container:hover, .cart-container:hover {
+      transform: translateY(-10px);
     }
     .form-container {
       max-width: 600px;
-      margin: 20px auto;
-      padding: 20px;
-      background-color: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+    .cart-container {
+      max-width: 400px;
     }
     .form-group {
       margin-bottom: 20px;
     }
     label {
       display: block;
-      font-weight: bold;
-      color: #495057;
-      margin-bottom: 5px;
+      font-weight: 600;
+      color: #000000;
+      margin-bottom: 8px;
     }
     input, select, button {
       width: 100%;
       padding: 12px;
-      border-radius: 4px;
+      border-radius: 8px;
       font-size: 1rem;
+      border: 1px solid #ced4da;
+      box-sizing: border-box;
     }
     input[type="text"], input[type="email"], input[type="date"], select {
-      border: 1px solid #ced4da;
+      background-color: #f8f9fa;
+    }
+    input[type="text"]:focus, input[type="email"]:focus, input[type="date"]:focus, select:focus {
+      outline: none;
+      border-color: #007bff;
+      background-color: #ffffff;
     }
     button {
-      background-color: #007bff;
+      background-color: #5499c7;
       color: white;
       border: none;
       cursor: pointer;
+      transition: background-color 0.3s ease;
     }
     button:hover {
-      background-color: #0056b3;
+      background-color: #218838;
     }
     .cart-list {
       list-style-type: none;
       padding: 0;
-      margin: 20px 0;
+      margin: 0;
     }
     .cart-item {
-      border-bottom: 1px solid #dee2e6;
+      border-bottom: 1px solid #e9ecef;
       padding: 15px 0;
       display: flex;
       justify-content: space-between;
+      align-items: center;
+    }
+    .item-name {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .item-price, .item-quantity, .item-total-price {
+      font-size: 0.95rem;
+      color: #6c757d;
     }
     .total {
       font-weight: bold;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       text-align: right;
+      margin-top: 20px;
+    }
+    .cart-summary {
+      margin-top: 20px;
+    }
+    .back-to-shop {
+      display: inline-block;
+      margin-top: 15px;
+      text-decoration: none;
+      color: #007bff;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+    .back-to-shop:hover {
+      color: #0056b3;
+    }
+    h2, h3 {
+      margin-top: 0;
+    }
+    .icon {
+      font-size: 1.5rem;
+      color: #007bff;
+      margin-right: 10px;
+    }
+    .form-container i, .cart-container i {
+      font-size: 1.2rem;
+      color: #6c757d;
+      margin-right: 10px;
+    }
+    .form-group input, .form-group select {
+      padding-left: 10px;
+      font-size: 1rem;
+    }
+    .cart-item img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-right: 10px;
     }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>Crear Nueva Transacción</h1>
-</header>
 
-<div class="form-container">
-  <form th:action="@{/nuevaTransaccion}" method="post">
-    <input type="hidden" name="usuarioId" th:value="${usuario.usuarioId}"/>
-    <input type="hidden" name="carritoId" th:value="${carrito.id}"/>
-    <input type="hidden" name="subtotal" th:value="${subtotal}"/>
+<div class="container">
+  <!-- Formulario -->
+  <div class="form-container">
+    <form th:action="@{/nuevaTransaccion}" method="post">
+      <input type="hidden" name="usuarioId" th:value="${usuario.usuarioId}" />
+      <input type="hidden" name="carritoId" th:value="${carrito.id}" />
+      <input type="hidden" name="subtotal" th:value="${subtotal}" />
 
-    <div class="form-group">
-      <label for="metodoPagoId">Método de Pago:</label>
-      <select name="metodoPagoId" required>
-        <option value="">Seleccione un método de pago</option>
-        <option value="1">Tarjeta de Crédito</option>
+      <div class="form-group">
+        <label for="metodoPagoId">Método de Pago:</label>
+        <select name="metodoPagoId" required>
+          <option value="">Seleccione un método de pago</option>
+          <option value="1">Tarjeta de Crédito</option>
+        </select>
+      </div>
 
-      </select>
+      <div>
+        <label for="numeroTarjeta">Número de Tarjeta:</label>
+        <input type="text" name="numeroTarjeta" id="numeroTarjeta"
+               placeholder="Ingresa el número de tu tarjeta" maxlength="16"
+               oninput="this.value = this.value.replace(/[^0-9]/g, '');" required />
+      </div>
+
+
+      <div>
+        <label for="correo">Correo:</label>
+        <input type="email" name="correo" id="correo" placeholder="Ingresa tu correo" required
+               pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Por favor ingresa un correo válido con @." />
+      </div>
+
+      <div class="form-group">
+        <label for="fechaExpiracion">Fecha de Expiración:</label>
+        <input type="date" name="fechaExpiracion" required />
+      </div>
+
+      <div class="form-group">
+        <label for="cvv">CVV:</label>
+        <input type="text" name="cvv" id="cvv" required placeholder="Código de seguridad de la tarjeta"
+               maxlength="3"
+               oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 3);" />
+      </div>
+
+
+      <div class="form-group">
+        <label>Subtotal:</label>
+        <span th:text="${#numbers.formatDecimal(subtotal, 1, 2)}">0.00</span>
+      </div>
+
+      <div class="form-group">
+        <label>Total con IGV (10%):</label>
+        <span th:text="${#numbers.formatDecimal(subtotal * 1.10, 1, 2)}">0.00</span>
+      </div>
+
+      <button type="submit"><i class="fas fa-check-circle"></i> Registrar Transacción</button>
+    </form>
+  </div>
+
+  <!-- Resumen del carrito -->
+  <div class="cart-container">
+    <h2><i class="fas fa-shopping-cart"></i> Resumen de Productos</h2>
+    <p>Hola, <span th:text="${usuario.nombres}"></span>. Tienes <span th:text="${totalProductos}"></span> productos en tu carrito.</p>
+
+    <div th:if="${detalles.size() > 0}">
+      <ul class="cart-list" th:each="item : ${detalles}">
+        <li class="cart-item">
+          <div class="item-name" th:text="${item.producto.nombre}">Nombre del producto</div>
+          <div class="item-price" th:text="'Precio: S/.' + ${#numbers.formatDecimal(item.precio, 2, 2)}">Precio</div>
+          <div class="item-quantity" th:text="'Cantidad: ' + ${item.cantidad}">Cantidad</div>
+          <div class="item-total-price" th:text="'Total: S/.' + ${#numbers.formatDecimal(item.precio * item.cantidad, 2, 2)}">Precio Total</div>
+        </li>
+      </ul>
+    </div>
+    <div th:unless="${detalles.size() > 0}">
+      <p>No tienes productos en tu carrito actualmente.</p>
     </div>
 
-    <div class="form-group">
-      <label for="numeroTarjeta">Número de Tarjeta:</label>
-      <input type="text" name="numeroTarjeta" required placeholder="Ingrese el número de su tarjeta"/>
+    <div class="total" th:if="${detalles.size() > 0}">
+      <h3 th:text="'Subtotal: S/.' + ${#numbers.formatDecimal(subtotal, 2, 2)}">Subtotal</h3>
     </div>
 
-    <div class="form-group">
-      <label for="correo">Correo Electrónico:</label>
-      <input type="email" name="correo" required placeholder="ejemplo@correo.com"/>
-    </div>
-
-    <div class="form-group">
-      <label for="fechaExpiracion">Fecha de Expiración:</label>
-      <input type="date" name="fechaExpiracion" required/>
-    </div>
-
-    <div class="form-group">
-      <label for="cvv">CVV:</label>
-      <input type="text" name="cvv" required placeholder="Código de seguridad de la tarjeta"/>
-    </div>
-
-    <div class="form-group">
-      <label>Subtotal:</label>
-      <span th:text="${#numbers.formatDecimal(subtotal, 1, 2)}">0.00</span>
-    </div>
-
-    <div class="form-group">
-      <label>Total con IGV (10%):</label>
-      <span th:text="${#numbers.formatDecimal(subtotal * 1.10, 1, 2)}">0.00</span>
-    </div>
-
-    <button type="submit">Registrar Transacción</button>
-  </form>
+    <a href="/carrito" class="back-to-shop"><i class="fas fa-arrow-left"></i> Volver a la Tienda</a>
+  </div>
 </div>
-
-<h2>Resumen de Productos:</h2>
-<p>Hola, <span th:text="${usuario.nombres}"></span>. Tienes <span th:text="${totalProductos}"></span> productos en tu carrito.</p>
-
-<div th:if="${detalles.size() > 0}">
-  <ul class="cart-list" th:each="item : ${detalles}">
-    <li class="cart-item">
-      <div class="item-name" th:text="${item.producto.nombre}">Nombre del producto</div>
-      <div class="item-price" th:text="'Precio: $' + ${#numbers.formatDecimal(item.precio, 1, 2)}">Precio</div>
-      <div class="item-quantity" th:text="'Cantidad: ' + ${item.cantidad}">Cantidad</div>
-      <div class="item-total-price" th:text="'Total: $' + ${#numbers.formatDecimal(item.precio * item.cantidad, 1, 2)}">Precio Total</div>
-    </li>
-  </ul>
-</div>
-<div th:unless="${detalles.size() > 0}">
-  <p>No tienes productos en tu carrito actualmente.</p>
-</div>
-
-<div class="total" th:if="${detalles.size() > 0}">
-  <h3 th:text="'Subtotal: $' + ${#numbers.formatDecimal(subtotal, 1, 2)}">Subtotal</h3>
-</div>
-
-<a href="/carrito" class="back-to-shop"><i class="fas fa-store"></i> Volver a la Tienda</a>
 
 <footer>
-  <p>&copy; 2024 Tu Empresa. Todos los derechos reservados.</p>
+  <p>&copy; 2024 PetsFriends. Todos los derechos reservados.</p>
+
+
 </footer>
 
 </body>

@@ -33,6 +33,8 @@ public class CitaService {
         return citaRepository.save(cita);
     }
 
+
+
     public Cita updateCita(Long citaId, Cita nuevaCita) throws Exception {
         return citaRepository.findById(citaId).map(cita -> {
             cita.setUsuario(nuevaCita.getUsuario());

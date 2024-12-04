@@ -28,8 +28,10 @@
 
   <style>
     .card img {
-         max-height: 200px; /* Ajusta la altura máxima según sea necesario */
-        object-fit: cover; /* Esto asegurará que la imagen mantenga su relación de aspecto */
+        max-width: 80%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 10px;
     }
 
      body {
@@ -38,9 +40,12 @@
          color: #333;
      }
 
-     .navbar {
-         background-color: #343a40;
-     }
+    .navbar {
+      position: sticky;
+      top: 0; /* La barra se quedará fija al llegar a la parte superior */
+      z-index: 1000; /* Asegura que la barra esté por encima de otros elementos */
+    }
+
 
      .navbar-brand {
          color: #fff;
@@ -179,22 +184,26 @@
          text-decoration: underline;
      }
 
-     .whatsapp-float {
-         position: fixed;
-         bottom: 20px; /* Ajusta la distancia desde el fondo */
-         right: 20px;  /* Ajusta la distancia desde el lado derecho */
-         background-color: #25d366; /* Color de fondo de WhatsApp */
-         color: white;  /* Color del ícono */
-         border-radius: 50%;  /* Hace que el botón sea redondo */
-         padding: 15px;  /* Tamaño del botón */
-         font-size: 24px;  /* Tamaño del ícono */
-         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* Sombra para darle profundidad */
-         transition: background-color 0.3s ease;  /* Animación para cambiar el color */
-     }
+ .whatsapp-float {
+    position: fixed; /* Fija el ícono en la pantalla */
+    bottom: 20px;    /* Distancia desde el fondo de la pantalla */
+    right: 20px;     /* Distancia desde el lado derecho de la pantalla */
+    background-color: #25D366; /* Color de fondo de WhatsApp */
+    color: white;    /* Color del ícono */
+    border-radius: 50%; /* Hacer el fondo redondo */
+    padding: 15px;   /* Espaciado alrededor del ícono */
+    font-size: 24px; /* Tamaño del ícono */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para darle un efecto flotante */
+    transition: all 0.3s ease; /* Animación al hacer hover */
+  }
 
-     .whatsapp-float:hover {
-         background-color: #128C7E; /* Cambio de color cuando se pasa el ratón */
-     }
+      .whatsapp-float:hover {
+    transform: scale(1.1); /* Aumentar el tamaño al pasar el ratón */
+  }
+
+  .fab.fa-whatsapp {
+    pointer-events: none; /* Evitar que el ícono intercepte clics innecesarios */
+  }
 
 
     #veterinarios {
@@ -265,7 +274,7 @@
 
   </style>
 
-  <nav class="navbar navbar-expand-lg navbar-dark absolute">
+  <nav class="navbar navbar-expand-lg navbar-dark sticky">
     <div class="container">
       <a class="navbar-brand" href="#">
         <img src="/images/LOGO-PETS0.png" alt="LOGO PETSFRIENDS" style="height: 100px;">
@@ -307,126 +316,121 @@
   </section>
 
 
-<main>
+  <main>
 
 
-  <section id="servicios" class="container mt-5">
-    <h2 class="section-title">¿Qué OFRECEMOS?</h2>
-    <div class="row">
-      <div class="col-md-4" th:each="servicio : ${servicios}">
-        <div class="card mb-4 shadow-sm">
-          <div class="card-body">
-            <p class="text-muted" th:text="${servicio.categoria.nombre}">Categoría del servicio</p>
-            <p class="card-text" th:text="${servicio.descripcion}">Descripción del servicio</p>
+    <section id="servicios" class="container mt-5">
+      <h2 class="section-title">¿Qué OFRECEMOS?</h2>
+      <div class="row">
+        <div class="col-md-4" th:each="servicio : ${servicios}">
+          <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+              <p class="text-muted" th:text="${servicio.categoria.nombre}">Categoría del servicio</p>
+              <p class="card-text" th:text="${servicio.descripcion}">Descripción del servicio</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="productos" class="mb-5">
-    <h2 class="section-title">Nuestros Productos</h2>
-    <div class="row">
-      <div class="col-md-4" th:each="producto : ${productos}">
-        <div class="card mb-4 shadow-sm text-center">
-          <div class="card-body">
-            <img th:src="${producto.imagen}"
-                 alt="Imagen de ${producto.nombre}"
-                 class="img-fluid mx-auto d-block" />
-            <h5 class="card-title" th:text="${producto.nombre}">Nombre del Producto</h5>
-            <p class="card-text" th:text="${producto.descripcion}">Descripción del producto</p>
-            <p class="text-muted" th:text="'Marca: ' + ${producto.marca}">Marca del producto</p>
+    <section id="productos" class="mb-5">
+      <h2 class="section-title">Nuestros Productos</h2>
+      <div class="row">
+        <div class="col-md-4" th:each="producto : ${productos}">
+          <div class="card mb-4 shadow-sm text-center">
+            <div class="card-body">
+              <img class="card-img-top img-fluid" th:src="${producto.imagen}" alt="Imagen del Producto">
+              <h5 class="card-title" th:text="${producto.nombre}">Nombre del Producto</h5>
+              <p class="card-text" th:text="${producto.descripcion}">Descripción del producto</p>
+              <p class="text-muted" th:text="'Marca: ' + ${producto.marca}">Marca del producto</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
 
-  <section id="reservas-contacto" class="container mt-5">
-    <h2 class="section-title text-left mb-4">Tu mascota, siempre a tu alcance</h2>
-    <div class="row">
-      <div class="col-md-6 d-flex flex-column justify-content-center align-items-start">
-        <p>En PETSFRIENDS, te brindamos una solución completa para el cuidado de tu mascota, todo desde la comodidad de tu hogar. A través de nuestra plataforma, podrás registrar a tu mascota, gestionar citas agendadas y comprar productos de calidad, todo en un solo lugar. Gracias a nuestra interfaz fácil de usar, tendrás un control total de la salud y bienestar de tu compañero. ¡Bienvenidos a una nueva forma de cuidar a tu mascota!</p>
-      </div>
+    <section id="reservas-contacto" class="container mt-5">
+      <h2 class="section-title text-left mb-4">Tu mascota, siempre a tu alcance</h2>
+      <div class="row">
+        <div class="col-md-6 d-flex flex-column justify-content-center align-items-start">
+          <p>En PETSFRIENDS, te brindamos una solución completa para el cuidado de tu mascota, todo desde la comodidad de tu hogar. A través de nuestra plataforma, podrás registrar a tu mascota, gestionar citas agendadas y comprar productos de calidad, todo en un solo lugar. Gracias a nuestra interfaz fácil de usar, tendrás un control total de la salud y bienestar de tu compañero. ¡Bienvenidos a una nueva forma de cuidar a tu mascota!</p>
+        </div>
 
-      <div class="col-md-6 d-flex justify-content-center align-items-center">
-        <div id="mapa" style="width: 100%;">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12805.497812994526!2d-79.04406003139155!3d-8.13250368465853!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91ad3dae38ca1e5b%3A0xf8a16f2b8bf3c0d!2sPetFriend!5e0!3m2!1ses!2ses!4v1695381327387!5m2!1ses!2ses" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        <div class="col-md-6 d-flex justify-content-center align-items-center">
+          <div id="mapa" style="width: 100%;">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12805.497812994526!2d-79.04406003139155!3d-8.13250368465853!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91ad3dae38ca1e5b%3A0xf8a16f2b8bf3c0d!2sPetFriend!5e0!3m2!1ses!2ses!4v1695381327387!5m2!1ses!2ses" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
 
-  <section id="veterinarios" class="mb-5">
-    <h2 class="section-title text-center mb-4">Nuestros Veterinarios</h2>
-    <div id="veterinariosCarousel" class="carousel slide" data-bs-ride="carousel">
-      <!-- Indicadores -->
-      <div class="carousel-indicators">
-        <button type="button" data-bs-target="#veterinariosCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#veterinariosCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#veterinariosCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-      </div>
+    <section id="veterinarios" class="mb-5">
+      <h2 class="section-title text-center mb-4">Nuestros Veterinarios</h2>
+      <div id="veterinariosCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#veterinariosCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#veterinariosCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#veterinariosCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
 
-      <!-- Carrusel -->
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <div class="row justify-content-center">
-            <div class="col-md-4" th:each="veterinario, iter : ${veterinarios}" th:if="${iter.index < 3}">
-              <div class="card mb-4 shadow-sm text-center">
-                <div class="card-body">
-                  <img th:src="@{/img/VETR.jpeg}" alt="Imagen del Veterinario" class="img-fluid mx-auto d-block rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
-                  <h5 class="card-title mt-3" th:text="${veterinario.nombres} + ' ' + ${veterinario.apellidos}">Nombre del Veterinario</h5>
-                  <p class="card-text" th:text="${veterinario.telefono}">Teléfono</p>
-                  <p class="card-text" th:text="${veterinario.correo}">Correo</p>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="row justify-content-center">
+              <div class="col-md-4" th:each="veterinario, iter : ${veterinarios}" th:if="${iter.index < 3}">
+                <div class="card mb-4 shadow-sm text-center">
+                  <div class="card-body">
+                    <img th:src="@{/img/VETR.jpeg}" alt="Imagen del Veterinario" class="img-fluid mx-auto d-block rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                    <h5 class="card-title mt-3" th:text="${veterinario.nombres} + ' ' + ${veterinario.apellidos}">Nombre del Veterinario</h5>
+                    <p class="card-text" th:text="${veterinario.telefono}">Teléfono</p>
+                    <p class="card-text" th:text="${veterinario.correo}">Correo</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="carousel-item">
+            <div class="row justify-content-center">
+              <div class="col-md-4" th:each="veterinario, iter : ${veterinarios}" th:if="${iter.index >= 3 && iter.index < 6}">
+                <div class="card mb-4 shadow-sm text-center">
+                  <div class="card-body">
+                    <img th:src="@{/img/VETR.jpeg}" alt="Imagen del Veterinario" class="img-fluid mx-auto d-block rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                    <h5 class="card-title mt-3" th:text="${veterinario.nombres} + ' ' + ${veterinario.apellidos}">Nombre del Veterinario</h5>
+                    <p class="card-text" th:text="${veterinario.telefono}">Teléfono</p>
+                    <p class="card-text" th:text="${veterinario.correo}">Correo</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="carousel-item">
-          <div class="row justify-content-center">
-            <div class="col-md-4" th:each="veterinario, iter : ${veterinarios}" th:if="${iter.index >= 3 && iter.index < 6}">
-              <div class="card mb-4 shadow-sm text-center">
-                <div class="card-body">
-                  <img th:src="@{/img/VETR.jpeg}" alt="Imagen del Veterinario" class="img-fluid mx-auto d-block rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
-                  <h5 class="card-title mt-3" th:text="${veterinario.nombres} + ' ' + ${veterinario.apellidos}">Nombre del Veterinario</h5>
-                  <p class="card-text" th:text="${veterinario.telefono}">Teléfono</p>
-                  <p class="card-text" th:text="${veterinario.correo}">Correo</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#veterinariosCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#veterinariosCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Siguiente</span>
+        </button>
       </div>
-
-      <!-- Controles -->
-      <button class="carousel-control-prev" type="button" data-bs-target="#veterinariosCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Anterior</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#veterinariosCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Siguiente</span>
-      </button>
-    </div>
-  </section>
+    </section>
 
 
 
 
 
 
-</main>
-<footer>
-  <p>&copy; 2024 Mi Veterinaria - Todos los derechos reservados</p>
-</footer>
+  </main>
+  <footer>
+    <p>&copy; 2024 Mi Veterinaria - Todos los derechos reservados</p>
+  </footer>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-  <a href="https://wa.me/1234567890" class="whatsapp-float" target="_blank">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+  <a href="https://wa.me/974756684" class="whatsapp-float" target="_blank">
     <i class="fab fa-whatsapp"></i>
   </a>
 

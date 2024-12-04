@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class CitaController {
     }
 
     @PostMapping("/citas")
-    public String registrarCita(@ModelAttribute("nuevaCita") Cita nuevaCita, HttpSession session, Model model) {
+    public String registrarCita(@ModelAttribute("nuevaCita") Cita nuevaCita, HttpSession session, RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
 
         if (usuario != null) {
@@ -69,16 +70,17 @@ public class CitaController {
                 nuevaCita.calcularCostoCita();
                 nuevaCita.setEstado(false);
                 citaService.createCita(nuevaCita);
-                return "redirect:/citas";
+                return "redirect:/citas";  // Redirige a la lista de citas
             } catch (Exception e) {
-                model.addAttribute("errorMessage", e.getMessage());
+                redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
                 return "redirect:/citas";
             }
         } else {
-            model.addAttribute("errorMessage", "Debes iniciar sesión para registrar una cita.");
-            return "login";
+            redirectAttributes.addFlashAttribute("errorMessage", "Debes iniciar sesión para registrar una cita.");
+            return "redirect:/login";
         }
     }
+
 
     @DeleteMapping("/citas/eliminar/{citaId}")
     public String eliminarCita(@PathVariable Long citaId, HttpSession session, Model model) {

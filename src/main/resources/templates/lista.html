@@ -176,13 +176,21 @@
         button:hover {
             background-color: #5B8686;
         }
+         .error-message {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+    }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>Gestión de Citas</h1>
     <!-- Tu contenido aquí -->
-    <div th:if="${errorMessage}" class="alert alert-danger">
+    <div th:if="${errorMessage}" class="error-message" role="alert">
         <p th:text="${errorMessage}"></p>
     </div>
     <div class="contact-form-wrapper">

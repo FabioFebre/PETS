@@ -25,7 +25,7 @@
             justify-content: space-between;
             width: 80%;
             max-width: 800px;
-            background-color: #444;
+            background-color: #16a085;
             color: #fff;
             padding: 10px 20px;
             border-radius: 10px;
@@ -147,7 +147,7 @@
             text-decoration: none;
             padding: 12px 20px;
             border-radius: 25px;
-            background-color: #4CAF50;
+            background-color: #16a085;
             color: #fff;
             font-size: 1rem;
             display: inline-block;
@@ -156,7 +156,7 @@
         }
 
         .buttons a:hover {
-            background-color: #45a049;
+            background-color: #48c9b0;
         }
 
         footer {
@@ -186,7 +186,6 @@
 <body>
 <div class="container">
 
-    <!-- Mensajes de error y confirmación -->
     <div th:if="${error}" class="info-box" style="background-color: #f44336;">
         <p th:text="${error}">Error genérico</p>
     </div>
@@ -194,19 +193,16 @@
         <p th:text="${mensaje}">Mensaje de éxito</p>
     </div>
 
-    <!-- Información del usuario -->
     <div class="info-box">
         <p><strong>ID Usuario:</strong> <span th:text="${usuario.usuarioId}">12345</span></p>
         <p><strong>ID Carrito:</strong> <span th:text="${carrito.id}">67890</span></p>
     </div>
 
-    <!-- Productos disponibles -->
     <section>
         <h1>Productos Disponibles</h1>
         <div class="product-row">
             <article class="product-card" th:each="producto : ${productos}">
                 <h5 th:text="${producto.nombre}">Nombre del Producto</h5>
-                <p th:text="${producto.descripcion}">Descripción del producto</p>
                 <p class="text-muted" th:text="'Marca: ' + ${producto.marca}">Marca del producto</p>
                 <p class="item-price" th:text="'Precio: $' + ${producto.precio}">Precio del producto</p>
                 <form th:action="@{/agregarProducto}" method="post">
@@ -236,7 +232,6 @@
         </th:block>
     </ul>
 
-    <!-- Botones de acción -->
     <div class="buttons">
         <a href="/">Regresar</a>
         <a href="/pago">Proceder al Pago</a>
@@ -244,8 +239,14 @@
 </div>
 
 <footer>
-    <p>&copy; 2024 Carrito de Compras. Todos los derechos reservados.</p>
+    <p>&copy; 2024 Carrito de Compras. Todos los derechos reservados a PetsFriends</p>
+    <div class="contact-info">
+        <p>416 Los Granados
+            , Víctor Larco Herrera, La Libertad
+        </p>
+    </div>
 </footer>
+
 
 </body>
 </html>

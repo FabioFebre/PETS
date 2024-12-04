@@ -21,6 +21,9 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
+    public Usuario obtenerUsuarioPorUsername(String username) {
+        return usuarioRepository.findByUsername(username);
+    }
 
 
     public Usuario actualizarUsuario(int id, Usuario usuarioActualizado) {
@@ -29,6 +32,8 @@ public class UsuarioService {
         if (usuarioExistente == null) {
             throw new RuntimeException("Usuario con ID " + id + " no encontrado.");
         }
+
+
 
         usuarioExistente.setNombres(usuarioActualizado.getNombres());
         usuarioExistente.setApellidos(usuarioActualizado.getApellidos());

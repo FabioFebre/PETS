@@ -64,22 +64,20 @@ public class MascotaController {
         if (usuario != null) {
             List<Usuario> usuarios = usuarioService.obtenerTodosLosUsuarios();
 
-            // Procesar y limpiar la URL de la foto del usuario
             String imagenUrl = usuario.getFoto();
             if (imagenUrl == null || imagenUrl.isEmpty()) {
                 imagenUrl = "https://res.cloudinary.com/dq2suwtlm/image/upload/v1732582308/user.webp";
             } else {
-                imagenUrl = limpiarRutaImagen(imagenUrl); // Aplicar el método de limpieza
+                imagenUrl = limpiarRutaImagen(imagenUrl);
             }
 
-            // Obtener las mascotas y procesar sus URLs de fotos
             List<Mascota> mascotas = mascotaService.obtenerMascotasPorUsuario(usuario.getUsuarioId());
             for (Mascota mascota : mascotas) {
                 String fotom = mascota.getFotom();
                 if (fotom == null || fotom.isEmpty()) {
                     mascota.setFotom("https://res.cloudinary.com/dq2suwtlm/image/upload/v1732582308/default_mascota.webp");
                 } else {
-                    mascota.setFotom(limpiarRutaImagen(fotom)); // Aplicar el método de limpieza
+                    mascota.setFotom(limpiarRutaImagen(fotom));
                 }
             }
 
@@ -214,42 +212,46 @@ public class MascotaController {
             return "login";
         }
 
-        usuario.setNombres(nombres);
-        usuario.setApellidos(apellidos);
-        usuario.setCorreo(correo);
-        usuario.setUsername(username);
-
-        if (contraseña != null && !contraseña.isEmpty()) {
-            usuario.setContraseña(contraseña);
-        }
-
-        usuario.setFechaNacimiento(LocalDate.parse(fechaNacimiento));
-        usuario.setTelefono(telefono);
-        usuario.setDireccion(direccion);
-
-        if (foto != null && !foto.isEmpty()) {
-            try {
-                File archivo = new File(foto.getOriginalFilename());
-                FileOutputStream fos = new FileOutputStream(archivo);
-                fos.write(foto.getBytes());
-                fos.close();
-
-                String imagenUrl = cloudinaryService.subirImagen(archivo);
-
-                usuario.setFoto(imagenUrl);
-
-            } catch (IOException e) {
-                model.addAttribute("errorMessage", "Error al procesar la foto.");
+        if (!username.equals(usuario.getUsername())) {
+            Usuario usuarioExistente = usuarioService.obtenerUsuarioPorUsername(username);
+            if (usuarioExistente != null) {
+                model.addAttribute("errorMessage", "El nombre de usuario ya está en uso.");
                 return "editar_usuario";
             }
         }
 
-        usuarioService.actualizarUsuario(usuario.getUsuarioId(), usuario);
+        try {
+            usuario.setNombres(nombres);
+            usuario.setApellidos(apellidos);
+            usuario.setCorreo(correo);
+            usuario.setUsername(username);
 
-        session.setAttribute("usuario", usuario);
+            if (contraseña != null && !contraseña.isEmpty()) {
+                usuario.setContraseña(contraseña);
+            }
 
-        return "redirect:/perfil";
+            usuario.setFechaNacimiento(LocalDate.parse(fechaNacimiento));
+            usuario.setTelefono(telefono);
+            usuario.setDireccion(direccion);
+
+            if (foto != null && !foto.isEmpty()) {
+                File archivo = new File(foto.getOriginalFilename());
+                try (FileOutputStream fos = new FileOutputStream(archivo)) {
+                    fos.write(foto.getBytes());
+                }
+                String imagenUrl = cloudinaryService.subirImagen(archivo);
+                usuario.setFoto(imagenUrl);
+            }
+
+            usuarioService.actualizarUsuario(usuario.getUsuarioId(), usuario);
+            session.setAttribute("usuario", usuario);
+            return "redirect:/perfil";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Error al actualizar el perfil: " + e.getMessage());
+            return "editar_usuario";
+        }
     }
+
 
     public String limpiarRutaImagen(String url) {
         if (url != null && url.contains("image/upload/")) {
