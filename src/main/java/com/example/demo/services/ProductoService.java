@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductoService {
@@ -26,7 +27,10 @@ public class ProductoService {
     }
 
     public List<Producto> obtenerTodosLosProductos() {
-        return productoRepository.findAll();
-    }
+        List<Producto> productos = productoRepository.findAll();
 
+        return productos.stream()
+                .filter(p -> p.getStock() > 2 && p.getEstado())
+                .collect(Collectors.toList());
+    }
 }

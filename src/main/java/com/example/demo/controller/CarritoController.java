@@ -61,7 +61,6 @@ public class CarritoController {
         }
     }
 
-
     @PostMapping("/agregarProducto")
     public String agregarProducto(
             @RequestParam("productoId") Long productoId,
@@ -77,7 +76,6 @@ public class CarritoController {
             return "login";
         }
 
-        // Buscar el producto
         Optional<Producto> productoOpt = productoRepository.findById(productoId);
         if (!productoOpt.isPresent()) {
             model.addAttribute("error", "Producto no encontrado.");
@@ -85,7 +83,11 @@ public class CarritoController {
         }
         Producto producto = productoOpt.get();
 
-        // Buscar el carrito
+        if (cantidad > producto.getStock()) {
+            model.addAttribute("error", "No hay suficiente stock para la cantidad solicitada.");
+            return "redirect:/carrito";
+        }
+
         Optional<Carrito> carritoOpt = carritoRepository.findById(carritoId);
         if (!carritoOpt.isPresent()) {
             model.addAttribute("error", "Carrito no encontrado.");
@@ -93,13 +95,12 @@ public class CarritoController {
         }
         Carrito carrito = carritoOpt.get();
 
-        // Crear o actualizar el ProductoCarrito
         ProductoCarrito productoCarrito = productoCarritoRepository
                 .findByCarritoAndProducto(carrito, producto)
                 .orElse(new ProductoCarrito(carrito, producto, 0));
 
         productoCarrito.setCantidad(productoCarrito.getCantidad() + cantidad);
-        productoCarrito.setPrecio(producto.getPrecio().multiply(BigDecimal.valueOf(productoCarrito.getCantidad())));
+        productoCarrito.setPrecio(producto.getPrecio());
 
         productoCarritoRepository.save(productoCarrito);
 

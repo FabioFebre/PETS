@@ -140,7 +140,8 @@
         .buttons {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
+            margin-top: 10px;
+            margin-end: 10px;
         }
 
         .buttons a {
@@ -186,12 +187,8 @@
 <body>
 <div class="container">
 
-    <div th:if="${error}" class="info-box" style="background-color: #f44336;">
-        <p th:text="${error}">Error genérico</p>
-    </div>
-    <div th:if="${mensaje}" class="info-box" style="background-color: #4CAF50;">
-        <p th:text="${mensaje}">Mensaje de éxito</p>
-    </div>
+    <div th:if="${mensaje}" class="alert alert-success" th:text="${mensaje}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
     <div class="info-box">
         <p><strong>ID Usuario:</strong> <span th:text="${usuario.usuarioId}">12345</span></p>
@@ -233,8 +230,10 @@
     </ul>
 
     <div class="buttons">
-        <a href="/">Regresar</a>
         <a href="/pago">Proceder al Pago</a>
+    </div>
+    <div class="buttons">
+        <a href="/">Regresar</a>
     </div>
 </div>
 

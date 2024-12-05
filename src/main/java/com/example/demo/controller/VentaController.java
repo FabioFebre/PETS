@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.models.*;
 import com.example.demo.repository.DetalleCarritoRepository;
+import com.example.demo.repository.DetalleVentaRepository;
 import com.example.demo.repository.ProductoCarritoRepository;
 import com.example.demo.repository.VentaRepository;
 import com.example.demo.services.*;
@@ -28,7 +29,8 @@ public class VentaController {
     private UsuarioService usuarioService;
     private final MetodoPagoService metodoPagoService;
     private final ProductoCarritoService productoCarritoService;
-
+    @Autowired
+    private DetalleVentaRepository detalleVentaRepository;
     @Autowired
     private VentaRepository ventaRepository;
     private final CarritoService carritoService;
@@ -62,7 +64,6 @@ public class VentaController {
             BigDecimal subtotal = BigDecimal.ZERO;
             int totalProductos = 0;
 
-            // Comprobar si el carrito no es nulo y tiene productos
             if (carrito != null && carrito.getProductoCarrito() != null) {
                 totalProductos = carrito.getProductoCarrito().stream()
                         .mapToInt(ProductoCarrito::getCantidad)
@@ -98,6 +99,7 @@ public class VentaController {
                                        @RequestParam("carritoId") Long carritoId,
                                        @RequestParam("subtotal") BigDecimal subtotal,
                                        Model model) {
+
         Venta nuevaTransaccion = new Venta();
 
         MetodoPago metodoPago = metodoPagoService.obtenerMetodoPorId(metodoPagoId)
@@ -121,10 +123,24 @@ public class VentaController {
 
         ventaRepository.save(nuevaTransaccion);
 
+        // Guardar los detalles de la venta
+        for (ProductoCarrito productoCarrito : carrito.getProductoCarrito()) {
+            Producto producto = productoCarrito.getProducto();
+            int cantidadComprada = productoCarrito.getCantidad();
+
+            DetalleVenta detalleVenta = new DetalleVenta(producto, cantidadComprada, producto.getPrecio());
+            detalleVenta.setVenta(nuevaTransaccion);
+            detalleVenta.setCarrito(carrito);
+
+            detalleVentaRepository.save(detalleVenta);
+
+            producto.setStock(producto.getStock() - cantidadComprada);
+            productoCarritoRepository.save(productoCarrito);
+        }
+
         productoCarritoService.eliminarProductosDelCarrito(carrito.getId());
 
         return "redirect:/carrito";
     }
-
 
 }

@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -40,8 +41,9 @@ public class MascotaController {
     @Autowired
     private MascotaService mascotaService;
 
+
     @Autowired
-    private RestTemplate restTemplate;
+    private PasswordEncoder passwordEncoder;
 
     private final UsuarioService usuarioService;
     private final DetalleVentaService detalleVentaService;
@@ -52,7 +54,8 @@ public class MascotaController {
     @Autowired
     private MascotaRepository mascotaRepository;
 
-    public MascotaController(UsuarioService usuarioService, DetalleVentaService detalleVentaService, CloudinaryService cloudinaryService) {
+    public MascotaController(PasswordEncoder passwordEncoder, UsuarioService usuarioService, DetalleVentaService detalleVentaService, CloudinaryService cloudinaryService) {
+        this.passwordEncoder = passwordEncoder;
         this.usuarioService = usuarioService;
         this.detalleVentaService = detalleVentaService;
         this.cloudinaryService = cloudinaryService;
@@ -226,8 +229,10 @@ public class MascotaController {
             usuario.setCorreo(correo);
             usuario.setUsername(username);
 
+            // Si la contraseña fue modificada, la encriptamos
             if (contraseña != null && !contraseña.isEmpty()) {
-                usuario.setContraseña(contraseña);
+                String contraseñaEncriptada = passwordEncoder.encode(contraseña);
+                usuario.setContraseña(contraseñaEncriptada);
             }
 
             usuario.setFechaNacimiento(LocalDate.parse(fechaNacimiento));
@@ -251,7 +256,6 @@ public class MascotaController {
             return "editar_usuario";
         }
     }
-
 
     public String limpiarRutaImagen(String url) {
         if (url != null && url.contains("image/upload/")) {
@@ -286,5 +290,12 @@ public class MascotaController {
     }
 
 
+    public PasswordEncoder getPasswordEncoder() {
+        return passwordEncoder;
+    }
+
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 }
 
