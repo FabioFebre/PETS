@@ -170,8 +170,10 @@
 
         <div class="input-group">
           <i class="fas fa-phone"></i>
-          <input type="text" id="telefono" name="telefono" placeholder="Teléfono">
+          <input type="text" id="telefono" name="telefono" placeholder="Teléfono" maxlength="9" pattern="\d{9}" required>
+          <small style="color: red; display: none;" id="error-telefono">Debe ingresar exactamente 9 números.</small>
         </div>
+
 
         <div class="input-group">
           <i class="fas fa-map-marker-alt"></i>
