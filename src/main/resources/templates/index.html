@@ -381,7 +381,8 @@
               <div class="col-md-4" th:each="veterinario, iter : ${veterinarios}" th:if="${iter.index < 3}">
                 <div class="card mb-4 shadow-sm text-center">
                   <div class="card-body">
-                    <img th:src="@{/img/VETR.jpeg}" alt="Imagen del Veterinario" class="img-fluid mx-auto d-block rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                    <img class="card-img-top img-fluid" th:src="'https://res.cloudinary.com/dq2suwtlm/' + ${veterinario.foto}"
+                         alt="Imagen del Producto">
                     <h5 class="card-title mt-3" th:text="${veterinario.nombres} + ' ' + ${veterinario.apellidos}">Nombre del Veterinario</h5>
                     <p class="card-text" th:text="${veterinario.telefono}">Teléfono</p>
                     <p class="card-text" th:text="${veterinario.correo}">Correo</p>
@@ -396,7 +397,8 @@
               <div class="col-md-4" th:each="veterinario, iter : ${veterinarios}" th:if="${iter.index >= 3 && iter.index < 6}">
                 <div class="card mb-4 shadow-sm text-center">
                   <div class="card-body">
-                    <img th:src="@{/img/VETR.jpeg}" alt="Imagen del Veterinario" class="img-fluid mx-auto d-block rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                    <img class="card-img-top img-fluid" th:src="'https://res.cloudinary.com/dq2suwtlm/' + ${veterinario.foto}"
+                         alt="Imagen del Producto">
                     <h5 class="card-title mt-3" th:text="${veterinario.nombres} + ' ' + ${veterinario.apellidos}">Nombre del Veterinario</h5>
                     <p class="card-text" th:text="${veterinario.telefono}">Teléfono</p>
                     <p class="card-text" th:text="${veterinario.correo}">Correo</p>

@@ -25,6 +25,9 @@ public class Veterinario {
     @Column(name = "telefono", nullable = false, length = 15)
     private String telefono;
 
+    @Column(name = "foto")
+    private String foto;
+
     @Column(name = "correo", nullable = false, length = 100)
     private String correo;
 
