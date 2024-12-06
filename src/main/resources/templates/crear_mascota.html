@@ -136,7 +136,7 @@
     <div>
       <label for="raza">Raza:</label>
       <input type="text" th:field="*{raza}" id="raza" placeholder="Ingresa la raza"
-             maxlength="8" oninput="this.value = this.value.replace(/[^A-Za-zÁáÉéÍíÓóÚúÑñ ]/g, '');" required />
+             maxlength="15" oninput="this.value = this.value.replace(/[^A-Za-zÁáÉéÍíÓóÚúÑñ ]/g, '');" required />
     </div>
 
     <div>
@@ -157,7 +157,7 @@
     <div>
       <label for="color">Color:</label>
       <input type="text" th:field="*{color}" id="color" placeholder="Ingresa el color"
-             maxlength="6" oninput="this.value = this.value.replace(/[^A-Za-zÁáÉéÍíÓóÚúÑñ ]/g, '');" required />
+             maxlength="15" oninput="this.value = this.value.replace(/[^A-Za-zÁáÉéÍíÓóÚúÑñ ]/g, '');" required />
     </div>
 
     <div>

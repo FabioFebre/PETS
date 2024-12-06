@@ -168,10 +168,12 @@
           <input type="date" id="fechaNacimiento" name="fechaNacimiento">
         </div>
 
-        <div class="input-group">
-          <i class="fas fa-phone"></i>
-          <input type="text" id="telefono" name="telefono" placeholder="Teléfono">
+        <div>
+          <label for="telefono">Teléfono:</label>
+          <input type="text" name="telefono" id="telefono" placeholder="Ingresa tu número de teléfono" maxlength="9"
+                 oninput="this.value = this.value.replace(/[^0-9]/g, '');" required />
         </div>
+
 
         <div class="input-group">
           <i class="fas fa-map-marker-alt"></i>

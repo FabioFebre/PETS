@@ -64,40 +64,36 @@ public class DetalleVentaController {
     public void generarPdfVenta(@PathVariable("id") Long id, HttpServletResponse response) {
         try {
             Venta venta = detalleVentaService.obtenerVentaPorId(id);
-
-            String rutaImagen = "/images/LOGO-PETS0.png";
+            String rutaImagen = "http://localhost:8081/images/LOGO-PETS0.png"; // Ruta accesible
 
             StringBuilder htmlContent = new StringBuilder();
             htmlContent.append("<html><head><style>")
-                    .append("img { position: absolute; top: 10px; right: 10px; width: 100px; }") // Estilo para la imagen
-                    .append(".detalles-container { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; }")
-                    .append(".detalle-venta { border: 1px solid #ccc; padding: 15px; width: 280px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }")
-                    .append(".detalle-venta h3 { margin-top: 0; font-size: 18px; }")
-                    .append(".detalle-venta p { margin: 5px 0; }")
-                    .append(".detalle-venta .total { font-weight: bold; color: green; }")
-                    .append(".detalle-venta .fecha-compra { color: #777; }")
+                    .append("body { font-family: Arial, sans-serif; padding: 20px; }")
+                    .append("header { text-align: center; margin-bottom: 20px; }")
+                    .append("header img { max-width: 100px; }")
+                    .append("table { width: 100%; border-collapse: collapse; margin: 20px 0; }")
+                    .append("th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }")
+                    .append("th { background-color: #f4f4f4; }")
+                    .append(".total { font-size: 18px; font-weight: bold; margin-top: 20px; text-align: right; }")
                     .append("</style></head><body>");
 
-            htmlContent.append("<img src='" + rutaImagen + "' alt='Logo Empresa'/>");
+            htmlContent.append("<header>")
+                    .append("<img src='").append(rutaImagen).append("' alt='Logo Empresa'/>")
+                    .append("<h2>Recibo de Compra</h2>")
+                    .append("</header>");
 
-            htmlContent.append("<h2>Detalles de Venta - Venta ID: " + venta.getId() + "</h2>");
-            htmlContent.append("<p>Fecha de la Venta: " + venta.getFechaCompra() + "</p>");
-
+            htmlContent.append("<p>Fecha de la Venta: ").append(venta.getFechaCompra()).append("</p>");
             htmlContent.append("<table><thead><tr><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Total</th></tr></thead><tbody>");
-
             for (DetalleVenta detalle : venta.getDetalles()) {
-                htmlContent.append("<tr>");
-                htmlContent.append("<td>" + detalle.getProducto().getNombre() + "</td>");
-                htmlContent.append("<td>" + detalle.getCantidad() + "</td>");
-                htmlContent.append("<td>" + detalle.getPrecio() + "</td>");
-                htmlContent.append("<td>" + detalle.getTotal() + "</td>");
-                htmlContent.append("</tr>");
+                htmlContent.append("<tr>")
+                        .append("<td>").append(detalle.getProducto().getNombre()).append("</td>")
+                        .append("<td>").append(detalle.getCantidad()).append("</td>")
+                        .append("<td>").append(detalle.getPrecio()).append("</td>")
+                        .append("<td>").append(detalle.getTotal()).append("</td>")
+                        .append("</tr>");
             }
-
             htmlContent.append("</tbody></table>");
-
-            htmlContent.append("<p class='total'>Total: " + venta.getTotal() + "</p>");
-
+            htmlContent.append("<p class='total'>Total: ").append(venta.getTotal()).append("</p>");
             htmlContent.append("</body></html>");
 
             response.setContentType("application/pdf");
@@ -106,7 +102,6 @@ public class DetalleVentaController {
             ITextRenderer renderer = new ITextRenderer();
             renderer.setDocumentFromString(htmlContent.toString());
             renderer.layout();
-
             renderer.createPDF(response.getOutputStream());
         } catch (Exception e) {
             e.printStackTrace();

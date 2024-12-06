@@ -27,38 +27,45 @@ public class PdfGenerationService {
     private String crearHtml(List<DetalleVenta> detallesVenta) {
         StringBuilder html = new StringBuilder();
         html.append("<html><head><style>")
-                .append("body { font-family: Arial, sans-serif; padding: 20px; }")
-                .append("h1 { color: #333; }")
-                .append(".detalles-container { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; }")
-                .append(".detalle-venta { border: 1px solid #ccc; padding: 15px; width: 280px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }")
-                .append(".detalle-venta h3 { margin-top: 0; font-size: 18px; }")
-                .append(".detalle-venta p { margin: 5px 0; }")
-                .append(".detalle-venta .total { font-weight: bold; color: green; }")
-                .append(".detalle-venta .fecha-compra { color: #777; }")
-                .append("</style></head><body>");
+                .append("body { font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; }")
+                .append("header { text-align: center; margin-bottom: 20px; }")
+                .append("header img { max-width: 150px; margin-bottom: 10px; }")
+                .append("header h1 { font-size: 24px; color: #333; margin: 0; }")
+                .append(".receipt { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); max-width: 600px; margin: 0 auto; }")
+                .append(".receipt h2 { font-size: 20px; margin-bottom: 10px; color: #555; }")
+                .append(".receipt p { margin: 5px 0; font-size: 14px; color: #666; }")
+                .append(".details-table { width: 100%; border-collapse: collapse; margin-top: 20px; }")
+                .append(".details-table th, .details-table td { border: 1px solid #ddd; padding: 10px; text-align: left; }")
+                .append(".details-table th { background-color: #f2f2f2; font-weight: bold; }")
+                .append(".total-row { font-weight: bold; color: #333; }")
+                .append("</style></head><body>")
+                // Encabezado con el logo
+                .append("<header>")
+                .append("<img src='static/images/LOGO-PETS0.png' alt='Logo Pets'>")
 
-        html.append("<h1>Detalles de Venta</h1>");
+                .append("<h1>Recibo de Compra</h1>")
+                .append("</header>");
+
+        html.append("<div class='receipt'>");
 
         if (detallesVenta != null && !detallesVenta.isEmpty()) {
-            html.append("<div class='detalles-container'>");
-            for (DetalleVenta detalle : detallesVenta) {
-                html.append("<div class='detalle-venta'>");
-                html.append("<h3>Producto: ").append(detalle.getProducto().getNombre()).append("</h3>");
-                html.append("<p>Cantidad: ").append(detalle.getCantidad()).append("</p>");
-                html.append("<p>Precio: ").append(detalle.getPrecio()).append("</p>");
-                html.append("<p>Total: ").append(detalle.getTotal()).append("</p>");
-                html.append("<p>Numero de Tarjeta: ").append(detalle.getVenta().getNumeroTarjeta()).append("</p>");
-                html.append("<p class='fecha-compra'>Fecha Compra: ").append(detalle.getVenta().getFechaCompra()).append("</p>");
-                html.append("</div>");
-            }
-            html.append("</div>");
-        } else {
-            html.append("<p>No tienes detalles de venta disponibles.</p>");
-        }
+            html.append("<h2>Detalles de Venta</h2>");
+            html.append("<p>Fecha: ").append(detallesVenta.get(0).getVenta().getFechaCompra()).append("</p>");
+            html.append("<table class='details-table'>")
+                    .append("<thead>")
+                    .append("<tr>")
+                    .append("<th>Producto</th>")
+                    .append("<th>Cantidad</th>")
+                    .append("<th>Precio Unitario</th>")
+                    .append("<th>Total</th>")
+                    .append("</tr>")
+                    .append("</thead><tbody>");
 
-        html.append("</body></html>");
+
+            }
+
+        html.append("</div></body></html>");
         return html.toString();
     }
-
 
 }
