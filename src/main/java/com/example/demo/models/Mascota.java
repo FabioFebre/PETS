@@ -51,6 +51,9 @@ public class Mascota {
     @Column(name = "edad")
     private Integer edad;
 
+    @Column(name = "genero", length = 50, nullable = true)
+    private String genero;
+
     @Column(name = "color", nullable = false, length = 50)
     private String color;
 
@@ -230,4 +233,11 @@ public class Mascota {
         return image;
     }
 
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
 }

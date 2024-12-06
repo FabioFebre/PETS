@@ -30,7 +30,7 @@
 
         h1 {
             text-align: center;
-            color: #4CAF50;
+            color: #538392;
             margin-bottom: 30px;
         }
 
@@ -58,7 +58,7 @@
         button {
             width: 100%;
             padding: 12px;
-            background-color: #4CAF50;
+            background-color: #538392;
             color: white;
             border: none;
             border-radius: 5px;
@@ -67,7 +67,7 @@
         }
 
         button:hover {
-            background-color: #45a049;
+            background-color: #6295A2;
         }
 
         /* Responsividad para pantallas medianas */
@@ -126,8 +126,6 @@
         <p th:text="${errorMessage}"></p>
     </div>
 
-
-
     <h1>Actualizar Usuario</h1>
 
     <div>
@@ -154,10 +152,6 @@
                oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '');" required />
     </div>
 
-    <div class="input-group">
-        <i class="fas fa-lock"></i>
-        <input type="password" id="contraseña" name="contraseña" placeholder="Contraseña" required>
-    </div>
     <div>
         <label for="fechaNacimiento">Fecha de Nacimiento:</label>
         <input type="date" name="fechaNacimiento" required />

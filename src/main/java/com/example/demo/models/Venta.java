@@ -49,6 +49,8 @@ public class Venta {
     @Column(name = "fecha_venta", updatable = false)
     private LocalDateTime fechaCompra = LocalDateTime.now();
 
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
+    private List<DetalleVenta> detalles;
 
     public Venta() {}
 
@@ -137,5 +139,13 @@ public class Venta {
     @Override
     public String toString() {
         return "Transaccion " + id + " - Usuario: " + usuario.getUsername();
+    }
+
+    public List<DetalleVenta> getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(List<DetalleVenta> detalles) {
+        this.detalles = detalles;
     }
 }

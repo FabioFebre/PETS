@@ -123,7 +123,6 @@ public class VentaController {
 
         ventaRepository.save(nuevaTransaccion);
 
-        // Guardar los detalles de la venta
         for (ProductoCarrito productoCarrito : carrito.getProductoCarrito()) {
             Producto producto = productoCarrito.getProducto();
             int cantidadComprada = productoCarrito.getCantidad();

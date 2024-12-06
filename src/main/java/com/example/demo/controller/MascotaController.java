@@ -84,7 +84,6 @@ public class MascotaController {
                 }
             }
 
-            // Pasar los datos al modelo
             model.addAttribute("usuario", usuario);
             model.addAttribute("mascotas", mascotas);
             model.addAttribute("imagenUrl", imagenUrl);
@@ -121,9 +120,10 @@ public class MascotaController {
                                @RequestParam("peso") BigDecimal peso,
                                @RequestParam("altura") BigDecimal altura,
                                @RequestParam("edad") Integer edad,
+                               @RequestParam("genero") String genero,
                                @RequestParam("color") String color,
                                @RequestParam("observaciones") String observaciones,
-                               @RequestParam(value = "fotom", required = false) MultipartFile fotom, // Fotom es opcional
+                               @RequestParam(value = "fotom", required = false) MultipartFile fotom,
                                HttpSession session,
                                Model model) {
 
@@ -150,6 +150,7 @@ public class MascotaController {
         nuevaMascota.setPeso(peso);
         nuevaMascota.setAltura(altura);
         nuevaMascota.setEdad(edad);
+        nuevaMascota.setGenero(genero);
         nuevaMascota.setColor(color);
         nuevaMascota.setObservaciones(observaciones);
         nuevaMascota.setUsuarioId(usuario.getUsuarioId());

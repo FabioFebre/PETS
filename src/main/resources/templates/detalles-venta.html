@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de Venta</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .detalles-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 20px;
+            justify-content: center;
+            grid-auto-rows: minmax(250px, auto); /* Ajusta la altura de cada fila */
+        }
+
+        .detalle-venta {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .detalle-venta:hover {
+            transform: scale(1.05);
+        }
+
+        .detalle-venta h3 {
+            margin-top: 0;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .detalle-venta p {
+            margin: 8px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .detalle-venta .total {
+            font-weight: bold;
+            color: green;
+            font-size: 16px;
+        }
+
+        .detalle-venta .fecha-compra {
+            color: #777;
+            font-size: 13px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: #f9f9f9;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        td {
+            background-color: #fff;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Responsividad para pantallas pequeñas */
+        @media (max-width: 768px) {
+            .detalles-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .detalles-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<div th:if="${errorMessage}" class="error-message">
+    <p th:text="${errorMessage}"></p>
+</div>
+
+<h2>Detalles de tus Ventas</h2>
+
+<div class="detalles-container" th:each="venta : ${ventas}">
+    <div class="detalle-venta">
+        <h3>Venta ID: <span th:text="${venta.id}"></span></h3>
+        <p>Fecha de la Venta: <span th:text="${venta.fechaCompra}"></span></p>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="detalle : ${venta.detalles}">
+                <td th:text="${detalle.producto.nombre}"></td>
+                <td th:text="${detalle.cantidad}"></td>
+                <td th:text="${detalle.precio}"></td>
+                <td th:text="${detalle.getTotal()}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="button-container">
+            <a th:href="@{/perfil/detalles-venta/pdf/{id}(id=${venta.id})}">
+                <button>Generar PDF de Venta</button>
+            </a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

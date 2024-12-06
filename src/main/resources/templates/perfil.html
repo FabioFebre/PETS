@@ -121,7 +121,7 @@
 
     button {
       padding: 10px 20px;
-      background-color: #3498db;
+      background-color: #80B9AD;
       color: white;
       border: none;
       border-radius: 5px;
@@ -131,7 +131,7 @@
     }
 
     button:hover {
-      background-color: #2980b9;
+      background-color: #6295A2;
     }
 
     .button-container {
@@ -163,12 +163,12 @@
     }
 
     .logout-btn.edit {
-      background-color: #abebc6;
+      background-color: #538392;
       color: #333;
     }
 
     .logout-btn.edit:hover {
-      background-color: #82e0aa;
+      background-color: #B3E2A7;
     }
 
     div.qr-container {
@@ -246,6 +246,7 @@
           <p><strong>Nombre:</strong> <span th:text="${mascota.nombre}"></span></p>
           <p><strong>Especie:</strong> <span th:text="${mascota.especie}"></span></p>
           <p><strong>Raza:</strong> <span th:text="${mascota.raza}"></span></p>
+          <p><strong>Genero:</strong> <span th:text="${mascota.Genero}"></span></p>
           <p><strong>Peso:</strong> <span th:text="${mascota.peso}"></span></p>
           <p><strong>Altura:</strong> <span th:text="${mascota.altura}"></span></p>
           <p><strong>Edad:</strong> <span th:text="${mascota.edad}"></span></p>
@@ -270,6 +271,9 @@
       </a>
       <a href="/">
         <button>Regresar a la página principal</button>
+      </a>
+      <a href="/perfil/detalles-venta">
+        <button>Ver mis detalles de venta</button>
       </a>
     </div>
   </div>

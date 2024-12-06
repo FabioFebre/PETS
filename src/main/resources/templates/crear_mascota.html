@@ -9,7 +9,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      height: 150vh;
       margin: 0;
     }
 
@@ -25,7 +25,7 @@
 
     h1 {
       text-align: center;
-      color: #4CAF50;
+      color: #538392;
       margin-bottom: 30px;
     }
 
@@ -45,7 +45,7 @@
       color: #333;
     }
 
-    input[type="text"], input[type="date"] {
+    input[type="text"], input[type="date"], input[type="number"], input[type="file"] {
       width: 100%;
       padding: 10px;
       border: 1px solid #ddd;
@@ -54,7 +54,7 @@
       margin-top: 5px;
     }
 
-    input[type="text"]:focus, input[type="date"]:focus {
+    input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus {
       border-color: #4CAF50;
     }
 
@@ -92,7 +92,7 @@
       width: 48%;
       padding: 12px;
       text-align: center;
-      background-color: #4CAF50;
+      background-color: #538392;
       color: white;
       border: none;
       border-radius: 5px;
@@ -101,12 +101,13 @@
     }
 
     .buttons-container a:hover, .buttons-container button:hover {
-      background-color: #45a049;
+      background-color: #6295A2;
     }
 
     .buttons-container a {
       text-decoration: none;
     }
+
   </style>
 </head>
 <body>
@@ -121,9 +122,15 @@
     </div>
 
     <div>
-      <label for="especie">Especie:</label>
-      <input type="text" th:field="*{especie}" id="especie" placeholder="Ingresa la especie"
-             maxlength="8" oninput="this.value = this.value.replace(/[^A-Za-zÁáÉéÍíÓóÚúÑñ ]/g, '');" required />
+      <label>Especie:</label>
+      <label for="perro">
+        <input type="radio" th:field="*{especie}" id="perro" value="perro" required />
+        Perro
+      </label>
+      <label for="gato">
+        <input type="radio" th:field="*{especie}" id="gato" value="gato" required />
+        Gato
+      </label>
     </div>
 
     <div>
@@ -154,12 +161,23 @@
     </div>
 
     <div>
-      <label for="edad">Edad:</label>
+      <label for="edad">Edad (Meses):</label>
       <input type="number" th:field="*{edad}" id="edad" placeholder="Ingresa la edad"
              min="0" max="99" step="1" required
              oninput="if(this.value.length > 2) this.value = this.value.slice(0, 2)" />
     </div>
 
+    <div>
+      <label>Genero:</label>
+      <label for="macho">
+        <input type="radio" th:field="*{genero}" id="macho" value="macho" required />
+        Macho
+      </label>
+      <label for="hembra">
+        <input type="radio" th:field="*{genero}" id="hembra" value="hembra" required />
+        Hembra
+      </label>
+    </div>
 
     <div>
       <label for="observaciones">Observaciones:</label>
@@ -168,7 +186,7 @@
 
     <div>
       <label for="fotom">Foto (opcional):</label>
-      <input type="file" th:field="*{fotom}" id="fotom" accept="image/*" required/>
+      <input type="file" th:field="*{fotom}" id="fotom" accept="image/*" />
     </div>
 
     <div class="buttons-container">

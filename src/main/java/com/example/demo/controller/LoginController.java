@@ -103,9 +103,13 @@ public class LoginController {
         nuevoUsuario.setCorreo(correo);
         nuevoUsuario.setUsername(username);
 
+
         String contraseñaEncriptada = passwordEncoder.encode(contraseña);
         nuevoUsuario.setContraseña(contraseñaEncriptada);
 
+        if (!fechaNacimiento.isEmpty()) {
+            nuevoUsuario.setFechaNacimiento(LocalDate.parse(fechaNacimiento));
+        }
         if (!fechaNacimiento.isEmpty()) {
             nuevoUsuario.setFechaNacimiento(LocalDate.parse(fechaNacimiento));
         }
