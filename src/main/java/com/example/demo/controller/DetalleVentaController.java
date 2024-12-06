@@ -56,7 +56,7 @@ public class DetalleVentaController {
             }
         } else {
             model.addAttribute("errorMessage", "Debes iniciar sesión para ver tus detalles de venta.");
-            return "login";  // Vista de login
+            return "login";
         }
     }
 
