@@ -30,7 +30,7 @@
 
         h1 {
             text-align: center;
-            color: #538392;
+            color: #4CAF50;
             margin-bottom: 30px;
         }
 
@@ -58,7 +58,7 @@
         button {
             width: 100%;
             padding: 12px;
-            background-color: #538392;
+            background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 5px;
@@ -67,7 +67,7 @@
         }
 
         button:hover {
-            background-color: #6295A2;
+            background-color: #45a049;
         }
 
         /* Responsividad para pantallas medianas */
@@ -126,46 +126,52 @@
         <p th:text="${errorMessage}"></p>
     </div>
 
+
+
     <h1>Actualizar Usuario</h1>
 
     <div>
         <label for="nombres">Nombres:</label>
         <input type="text" name="nombres" id="nombres" placeholder="Ingresa el nombre" maxlength="14"
-               oninput="this.value = this.value.replace(/[^A-Za-zÁáÉéÍíÓóÚúÑñ ]/g, '');"  />
+               oninput="this.value = this.value.replace(/[^A-Za-zÁáÉéÍíÓóÚúÑñ ]/g, '');" required />
     </div>
 
     <div>
         <label for="apellidos">Apellidos:</label>
         <input type="text" name="apellidos" id="apellidos" placeholder="Ingresa los apellidos" maxlength="14"
-               oninput="this.value = this.value.replace(/[^A-Za-zÁáÉéÍíÓóÚúÑñ ]/g, '');"  />
+               oninput="this.value = this.value.replace(/[^A-Za-zÁáÉéÍíÓóÚúÑñ ]/g, '');" required />
     </div>
 
     <div>
         <label for="correo">Correo:</label>
-        <input type="email" name="correo" id="correo" placeholder="Ingresa tu correo"
+        <input type="email" name="correo" id="correo" placeholder="Ingresa tu correo" required
                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Por favor ingresa un correo válido con @." />
     </div>
 
     <div>
         <label for="username">Username:</label>
         <input type="text" name="username" id="username" placeholder="Ingresa tu username" maxlength="15"
-               oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '');"  />
+               oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '');" required />
     </div>
 
+    <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="contraseña" name="contraseña" placeholder="Contraseña" >
+    </div>
     <div>
         <label for="fechaNacimiento">Fecha de Nacimiento:</label>
-        <input type="date" name="fechaNacimiento"  />
+        <input type="date" name="fechaNacimiento" required />
     </div>
 
     <div>
         <label for="telefono">Teléfono:</label>
-        <input type="text" name="telefono" id="telefono" placeholder="Ingresa tu número de teléfono" maxlength="10"
-               oninput="this.value = this.value.replace(/[^0-9]/g, '');"  />
+        <input type="text" name="telefono" id="telefono" placeholder="Ingresa tu número de teléfono" maxlength="9"
+               oninput="this.value = this.value.replace(/[^0-9]/g, '');" required />
     </div>
 
     <div>
         <label for="direccion">Dirección:</label>
-        <input type="text" name="direccion" placeholder="Ingresa tu dirección"  />
+        <input type="text" name="direccion" placeholder="Ingresa tu dirección" required />
     </div>
 
     <div>
